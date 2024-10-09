@@ -41,7 +41,7 @@ st.markdown(f"<h1 style='color:{WHITE}; text-align: center;'>Vic.ai AP Automatio
 st.write("This tool helps calculate the return on investment (ROI) for automating your Accounts Payable (AP) processes. Input your current metrics and projections to see potential savings.")
 
 # Input fields for executive-level metrics
-st.markdown("### Business Inputs")
+st.markdown("### Key Metrics")
 with st.form(key="roi_form"):
     current_invoice_volume = st.number_input('Current Invoice Volume per Month', min_value=0, value=5000)
     growth_rate = st.number_input('Projected Growth Rate (%)', min_value=0, max_value=100, value=2)
