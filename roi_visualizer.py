@@ -16,7 +16,7 @@ st.markdown(
         padding: 20px;
     }}
     h1, h2, h3, h4 {{
-        color: {PRIMARY_COLOR};  
+        color: {WHITE};  
         font-family: Arial, sans-serif;
     }}
     .stButton>button {{
@@ -37,7 +37,7 @@ st.markdown(
 )
 
 # App title with branding colors
-st.markdown(f"<h1 style='color:{PRIMARY_COLOR}; text-align: center;'>Vic.ai AP Automation ROI Tool</h1>", unsafe_allow_html=True)
+st.markdown(f"<h1 style='color:{WHITE}; text-align: center;'>Vic.ai AP Automation ROI Tool</h1>", unsafe_allow_html=True)
 st.write("This tool helps calculate the return on investment (ROI) for automating your Accounts Payable (AP) processes. Input your current metrics and projections to see potential savings.")
 
 # Input fields for executive-level metrics
