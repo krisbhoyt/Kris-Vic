@@ -117,7 +117,7 @@ if submit_button:
         invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
 
         # Cost Efficiency Gain
-         if processors_saved < 1:
+        if processors_saved < 1:
         labor_cost_savings = processors_saved / ap_processor_salary
         else:
         labor_cost_savings = processors_saved * ap_processor_salary
