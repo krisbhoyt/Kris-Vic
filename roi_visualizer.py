@@ -106,7 +106,7 @@ if submit_button:
         total_savings = total_labor_cost_savings + (early_payer_discount_savings * years)
 
         # Cumulative savings and investment over the years
-        cumulative_savings = [total_savings * years
+        cumulative_savings = total_savings * years
         cumulative_investment = automation_system_cost * years
         roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 for year in range(years)]
 
