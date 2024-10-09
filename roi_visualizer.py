@@ -118,9 +118,9 @@ if submit_button:
 
         # Cost Efficiency Gain
         if processors_saved < 1:
-            total_labor_cost_savings = processors_saved * ap_processor_salary
-        else:
             total_labor_cost_savings = processors_saved / ap_processor_salary
+        else:
+            total_labor_cost_savings = processors_saved * ap_processor_salary
                                       
         return {
             "Projected Invoice Volume": annual_invoice_volume,
