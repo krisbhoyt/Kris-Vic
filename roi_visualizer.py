@@ -44,14 +44,14 @@ st.write("This tool helps calculate the return on investment (ROI) for automatin
 st.markdown("### Business Inputs")
 with st.form(key="roi_form"):
     current_invoice_volume = st.number_input('Current Invoice Volume per Month', min_value=0, value=5000)
-    growth_rate = st.number_input('Projected Growth Rate (%)', min_value=0.0, max_value=100.0, value=5.0)
-    ap_processor_salary = st.number_input('AP Processor Salary ($)', min_value=0.0, value=55000.00)
+    growth_rate = st.number_input('Projected Growth Rate (%)', min_value=0.0, max_value=100.0, value=2)
+    ap_processor_salary = st.number_input('AP Processor Salary ($)', min_value=0.0, value=55000.0)
     num_ap_processors = st.number_input('Number of AP Processors', min_value=0, value=5)
     missed_discounts = st.number_input('Missed Early Payer Discounts ($ per year)', min_value=0.0, value=25000.0)
     
     # Time to process one invoice before and after automation (in minutes)
-    time_per_invoice_before = st.number_input('Time to Process One Invoice Before Automation (minutes)', min_value=0.0, value=8)
-    time_per_invoice_after = st.number_input('Time to Process One Invoice After Automation (minutes)', min_value=0.0, value=1)
+    time_per_invoice_before = st.number_input('Time to Process One Invoice Before Automation (minutes)', min_value=0.0, value=8.0)
+    time_per_invoice_after = st.number_input('Time to Process One Invoice After Automation (minutes)', min_value=0.0, value=1.5)
     
     # Automation rate
     automation_rate = st.number_input('Automation Rate (%)', min_value=0.0, max_value=100.0, value=70.0)
