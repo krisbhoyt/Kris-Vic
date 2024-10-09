@@ -107,6 +107,18 @@ if submit_button:
         cumulative_investment = [automation_system_cost * (year + 1) for year in range(years)]
         roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 for year in range(years)]
 
+        # Time Efficiency Gains
+        time_saved_per_invoice = time_before_automation - time_after_automation
+        non_automated_invoice_volume = invoice_volume * (1 - automation_rate / 100)
+        total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
+
+        # Processor Productivity Gains
+        invoices_per_processor_before = invoice_volume / num_ap_processors
+        invoices_per_processor_after = invoice_volume / (num_ap_processors - processors_saved)
+
+        # Cost Efficiency Gain
+        labor_cost_savings = processors_saved * ap_processor_salary
+                                      
         return {
             "Projected Invoice Volume": annual_invoice_volume,
             "Labor Cost Savings ($)": total_labor_cost_savings,
@@ -116,7 +128,10 @@ if submit_button:
             "Processors Saved": processors_saved,
             "Cumulative Savings": cumulative_savings,
             "Cumulative Investment": cumulative_investment,
-            "ROI Over Time": roi_over_time
+            "ROI Over Time": roi_over_time,
+            "Time Efficiency Gain": total_time_saved,
+            "Processor Productivity Gains": invoices_per_processor_after,
+            "Cost Efficiency Gain": labor_cost_savings
         }
 
     # Calculate ROI with growth projection
@@ -124,6 +139,13 @@ if submit_button:
                                         missed_discounts, time_per_invoice_before, time_per_invoice_after, 
                                         automation_system_cost, automation_rate)
 
+    # Display Efficiency Metrics
+    st.markdown("### Efficiency Gains")
+    col1, col2, col3 = st.columns(3)
+    col1.metric(label="Time Efficiency Gains", value=f"{int(results['Time Efficiency Gain']):,}")
+    col2.metric(label="Processor Productivity Gains", value=f"{int(results['Processor Productivity Gains']):.2f}")
+    col3.metric(label="Cost Efficiency Gain", value=f"{int(results['Cost Efficiency Gain']):.2f}")
+                
     # Display key metrics in a 3x2 grid for clarity
     st.markdown("### Key Metrics")
     col1, col2, col3 = st.columns(3)
