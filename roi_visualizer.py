@@ -2,6 +2,10 @@ import streamlit as st
 import plotly.graph_objects as go
 import numpy as np
 
+import streamlit as st
+import plotly.graph_objects as go
+import numpy as np
+
 # Vic.ai branding colors
 PRIMARY_COLOR = "#2E3B63"  # Dark Blue for Data
 WHITE = "#FFFFFF"  # White background
@@ -78,13 +82,16 @@ if submit_button:
         growth_multiplier = (1 + growth_rate / 100) ** years
         annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
 
-        # Calculate total time saved per year, considering the automation rate
-        total_time_saved_hours = time_saved_per_invoice_hours * annual_invoice_volume * (automation_rate / 100)
+        # Adjust time saved to account for automation rate
+        non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
+
+        # Total time saved considering only non-automated invoices
+        total_time_saved_hours = time_saved_per_invoice_hours * non_automated_invoice_volume
 
         # Assuming a standard work year (2,080 hours) per AP processor
         working_hours_per_year = 2080
 
-        # Calculate the number of processors saved based on time saved
+        # Calculate processors saved based on total time saved
         processors_saved = total_time_saved_hours / working_hours_per_year
 
         # Ensure processors saved does not exceed the number of AP processors
