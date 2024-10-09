@@ -2,10 +2,6 @@ import streamlit as st
 import plotly.graph_objects as go
 import numpy as np
 
-import streamlit as st
-import plotly.graph_objects as go
-import numpy as np
-
 # Vic.ai branding colors
 PRIMARY_COLOR = "#2E3B63"  # Dark Blue for Data
 WHITE = "#FFFFFF"  # White background
