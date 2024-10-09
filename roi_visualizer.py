@@ -94,13 +94,16 @@ if submit_button:
         processors_saved = min(processors_saved, num_ap_processors)
 
         # Calculate labor cost savings based on time saved
-        total_labor_cost_savings = processors_saved * ap_processor_salary
+        if processors_saved < 1:
+            total_labor_cost_savings = processors_saved / ap_processor_salary
+        else:
+            total_labor_cost_savings = processors_saved * ap_processor_salary
 
         # Early payer discount savings (realistic cap based on annual)
         early_payer_discount_savings = missed_discounts
 
         # Total savings (labor cost + early payer discounts)
-        total_savings = total_labor_cost_savings + early_payer_discount_savings
+        total_savings = total_labor_cost_savings + (early_payer_discount_savings * years)
 
         # Cumulative savings and investment over the years
         cumulative_savings = [total_savings * (year + 1) for year in range(years)]
@@ -114,13 +117,7 @@ if submit_button:
 
         # Processor Productivity Gains
         invoices_per_processor_before = current_invoice_volume / num_ap_processors
-        invoices_per_processor_after = current_invoice_volume / num_ap_processors - processors_saved)
-
-        # Cost Efficiency Gain
-        if processors_saved < 1:
-            total_labor_cost_savings = processors_saved / ap_processor_salary
-        else:
-            total_labor_cost_savings = processors_saved * ap_processor_salary
+        invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
                                       
         return {
             "Projected Invoice Volume": annual_invoice_volume,
@@ -134,7 +131,6 @@ if submit_button:
             "ROI Over Time": roi_over_time,
             "Time Efficiency Gain": total_time_saved,
             "Processor Productivity Gains": invoices_per_processor_after,
-            "Cost Efficiency Gain": labor_cost_savings
         }
 
     # Calculate ROI with growth projection
@@ -147,7 +143,6 @@ if submit_button:
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Time Efficiency Gains", value=f"{int(results['Time Efficiency Gain']):,}")
     col2.metric(label="Processor Productivity Gains", value=f"{int(results['Processor Productivity Gains']):.2f}")
-    col3.metric(label="Cost Efficiency Gain", value=f"${int(results['Cost Efficiency Gain']):.2f}")
                 
     # Display key metrics in a 3x2 grid for clarity
     st.markdown("### Key Metrics")
