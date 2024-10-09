@@ -108,7 +108,7 @@ if submit_button:
         roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 for year in range(years)]
 
         # Time Efficiency Gains
-        time_saved_per_invoice = time_before_automation - time_after_automation
+        time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
         non_automated_invoice_volume = invoice_volume * (1 - automation_rate / 100)
         total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
 
