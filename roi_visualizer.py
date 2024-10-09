@@ -113,8 +113,8 @@ if submit_button:
         total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
 
         # Processor Productivity Gains
-        invoices_per_processor_before = invoice_volume / num_ap_processors
-        invoices_per_processor_after = invoice_volume / (num_ap_processors - processors_saved)
+        invoices_per_processor_before = current_invoice_volume / num_ap_processors
+        invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
 
         # Cost Efficiency Gain
         labor_cost_savings = processors_saved * ap_processor_salary
