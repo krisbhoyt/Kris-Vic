@@ -117,6 +117,9 @@ if submit_button:
         invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
 
         # Cost Efficiency Gain
+         if processors_saved < 1:
+        labor_cost_savings = processors_saved / ap_processor_salary
+        else:
         labor_cost_savings = processors_saved * ap_processor_salary
                                       
         return {
@@ -144,7 +147,7 @@ if submit_button:
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Time Efficiency Gains", value=f"{int(results['Time Efficiency Gain']):,}")
     col2.metric(label="Processor Productivity Gains", value=f"{int(results['Processor Productivity Gains']):.2f}")
-    col3.metric(label="Cost Efficiency Gain", value=f"{int(results['Cost Efficiency Gain']):.2f}")
+    col3.metric(label="Cost Efficiency Gain", value=f"${int(results['Cost Efficiency Gain']):.2f}")
                 
     # Display key metrics in a 3x2 grid for clarity
     st.markdown("### Key Metrics")
