@@ -118,11 +118,9 @@ if submit_button:
 
         # Cost Efficiency Gain
         if processors_saved < 1:
-        # Calculate fractional savings if less than 1 processor is saved
-        labor_cost_savings = processors_saved * ap_processor_salary
+            labor_cost_savings = processors_saved * ap_processor_salary
         else:
-        # Full or more processor savings
-        labor_cost_savings = processors_saved / ap_processor_salary
+            labor_cost_savings = processors_saved / ap_processor_salary
                                       
         return {
             "Projected Invoice Volume": annual_invoice_volume,
