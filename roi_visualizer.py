@@ -114,7 +114,7 @@ if submit_button:
 
         # Processor Productivity Gains
         invoices_per_processor_before = current_invoice_volume / num_ap_processors
-        invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
+        invoices_per_processor_after = current_invoice_volume / num_ap_processors - processors_saved)
 
         # Cost Efficiency Gain
         if processors_saved < 1:
