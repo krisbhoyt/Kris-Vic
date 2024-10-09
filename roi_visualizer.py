@@ -109,7 +109,7 @@ if submit_button:
 
         # Time Efficiency Gains
         time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
-        non_automated_invoice_volume = invoice_volume * (1 - automation_rate / 100)
+        non_automated_invoice_volume = current_invoice_volume * (1 - automation_rate / 100)
         total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
 
         # Processor Productivity Gains
