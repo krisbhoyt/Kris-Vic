@@ -62,114 +62,67 @@ with st.form(key="roi_form"):
     submit_button = st.form_submit_button(label="Calculate ROI")
 
 if submit_button:
+    # Function to calculate progressive time savings over years
+    def calculate_time_per_invoice_over_years(initial_time, automation_rate, years):
+        time_per_invoice_years = []
+        automation_rates = []
+        
+        # Calculate time reduction each year assuming exponential automation increase
+        for year in range(0, years + 1):
+            # Exponential progression of automation from 0% to target rate over the years
+            current_automation_rate = 1 - (1 - automation_rate / 100) ** (year / years)
+            time_per_invoice = initial_time * (1 - current_automation_rate)  # Time saved based on automation rate
+            time_per_invoice_years.append(time_per_invoice)
+            automation_rates.append(current_automation_rate * 100)  # Store as percentage
+        
+        return time_per_invoice_years, automation_rates
+    
+    # Function to calculate ROI, time saved, processors saved, and net savings
     def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
                                   missed_discounts, time_per_invoice_before, time_per_invoice_after, 
                                   automation_system_cost, automation_rate):
-
+        
         # Call the function to get time savings per year
         time_per_invoice_years, automation_rates = calculate_time_per_invoice_over_years(time_per_invoice_before, automation_rate, years)
-        
-        # Calculate the projected future invoice volume with realistic scaling
+    
+        # Ensure that the annual invoice volume is calculated correctly
         growth_multiplier = (1 + growth_rate / 100) ** years
-        annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
-
+        annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier
+    
         # Calculate the total time spent processing invoices each year with progressive automation
         total_time_saved_years = []
         for year, time_per_invoice in enumerate(time_per_invoice_years):
             total_time_per_year = annual_invoice_volume * time_per_invoice / 60  # Convert to hours
             total_time_saved_years.append(total_time_per_year)
-
+    
         # Total time saved is the difference between year 0 (no automation) and year N (full automation)
         total_time_saved_hours = total_time_saved_years[0] - total_time_saved_years[-1]
-                                      
-        # Convert time from minutes to hours for the calculations
-        time_per_invoice_before_hours = time_per_invoice_before / 60
-        time_per_invoice_after_hours = time_per_invoice_after / 60
-
-        # Simplified inputs for calculating time savings over years
-        initial_time_per_invoice = st.number_input('Initial Time to Process One Invoice (minutes)', min_value=0.0, value=8.0)
-        automation_rate = st.number_input('Target Automation Rate (%)', min_value=0.0, max_value=100.0, value=70.0)
-        years = st.number_input('Number of Years for Projection', min_value=1, value=3)
-
-    # Function to calculate time saved each year with a linear progression of automation
-    def calculate_time_per_invoice_over_years(initial_time, automation_rate, years):
-                                            time_per_invoice_years = []
-                                            automation_rates = []
-        
-        # Calculate time reduction each year assuming linear automation increase
-        for year in range(0, years + 1):
-            # Linear progression of automation from 0% to target rate over the years
-            current_automation_rate = (year / years) * automation_rate / 100
-            time_per_invoice = initial_time * (1 - current_automation_rate)  # Time saved based on automation rate
-            time_per_invoice_years.append(time_per_invoice)
-        
-            return time_per_invoice_years, automation_rates
-
-        # Calculate time per invoice for each year
-        time_per_invoice_years = calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years)
-                                      
-        # Calculate total time spent on non-automated invoices after automation
-        total_time_before_hours = annual_invoice_volume * time_per_invoice_before_hours
-        total_time_after_hours = (annual_invoice_volume * (1 - automation_rate / 100)) * time_per_invoice_after_hours
-
-        # Total time saved is the difference between total time spent before and after automation
-        total_time_saved_hours = total_time_before_hours - total_time_after_hours
-
-        # Assuming a standard work year (2,080 hours) per AP processor
+    
+        # Ensure valid processors saved calculation
         working_hours_per_year = 2080
-
-        # Calculate total workload in hours for all processors
-        total_workload_before = num_ap_processors * working_hours_per_year
-
-        # Calculate how much of the total workload is reduced by automation
-        workload_reduced_by_automation = total_workload_before * (automation_rate / 100)
-
-        # Calculate processors saved based on workload reduction
-        processors_saved = workload_reduced_by_automation / working_hours_per_year
-
-        # Ensure processors saved doesn't exceed the current number of AP processors
+        processors_saved = total_time_saved_hours / working_hours_per_year
+    
+        # Ensure processors saved does not exceed the number of AP processors
         processors_saved = min(processors_saved, num_ap_processors)
-
-        # Calculate labor cost savings based on processors saved
+    
+        # Calculate labor cost savings based on time saved
         total_labor_cost_savings = processors_saved * ap_processor_salary
-
-        # Define non-automated invoice volume for future use
-        non_automated_invoice_volume = current_invoice_volume * (1 - automation_rate / 100)
-
-        # Prevent division by zero or negative value when calculating invoices per processor after automation
-        remaining_processors = num_ap_processors - processors_saved
-
-        if remaining_processors > 0:
-            invoices_per_processor_after = non_automated_invoice_volume / remaining_processors
-        else:
-            invoices_per_processor_after = 0  # Set to 0 or another meaningful value if all processors are saved
-
+    
         # Early payer discount savings (realistic cap based on annual)
         early_payer_discount_savings = missed_discounts
-
+    
         # Total savings (labor cost + early payer discounts)
-        total_savings = total_labor_cost_savings + (early_payer_discount_savings * years)
-
+        total_savings = total_labor_cost_savings + early_payer_discount_savings
+    
         # Cumulative savings and investment over the years
         cumulative_savings = [total_savings * (year + 1) for year in range(years)]
         cumulative_investment = [automation_system_cost * (year + 1) for year in range(years)]
-
-        # Calculate net savings (savings - investment)
         net_savings = [cumulative_savings[year] - cumulative_investment[year] for year in range(years)]
-
-        # Calculate ROI (%) for each year based on the cumulative savings and cumulative investment
-        roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 if cumulative_investment[year] != 0 else 0 for year in range(years)]
-
-        # Ensure the ROI for the final year is added to the results
-        roi_final = roi_over_time[-1]
-
-        # Time Efficiency Gains
-        time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
-        total_time_saved = time_saved_per_invoice * current_invoice_volume * (automation_rate / 100)
-
+        roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 for year in range(years)]
+    
         # Processor Productivity Gains
-        invoices_per_processor_before = current_invoice_volume / num_ap_processors
-        invoices_per_processor_after = non_automated_invoice_volume / remaining_processors if remaining_processors > 0 else 0
+        non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
+        invoices_per_processor_after = non_automated_invoice_volume / max(num_ap_processors - processors_saved, 1)
 
         total_hours_saved = (total_time_saved / 60)
         
