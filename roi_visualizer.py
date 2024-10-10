@@ -89,10 +89,12 @@ if submit_button:
         for rate in automation_rates:
             # Start with maximum manual processing and reduce as automation progresses
             non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
-            # Calculate the average time spent per invoice (combination of automated and non-automated)
+        if annual_invoice_volume > 0:
             avg_time_per_invoice_year = ((non_automated_invoice_volume * time_per_invoice_after_hours) + 
                                          (annual_invoice_volume * rate * time_per_invoice_before_hours)) / annual_invoice_volume
             time_per_invoice_years.append(avg_time_per_invoice_year)
+        else:
+            st.write("Error: Annual invoice volume is zero, skipping calculation.")
 
         # Calculate the time per invoice before automation (Year 0)
         avg_time_before_automation = time_per_invoice_before_hours
