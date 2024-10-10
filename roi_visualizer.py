@@ -120,7 +120,7 @@ if submit_button:
                                       
         # Ensure valid processors saved calculation
         working_hours_per_year = 2080
-        processors_saved = total_hours_saved - (working_hours_per_year * years)
+        processors_saved = total_hours_saved / working_hours_per_year
     
         # Ensure processors saved does not exceed the number of AP processors
         processors_saved = min(processors_saved, num_ap_processors)
