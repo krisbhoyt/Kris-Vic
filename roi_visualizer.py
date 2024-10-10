@@ -80,7 +80,7 @@ if submit_button:
             return [target_rate * (1 - np.exp(-lambd * t)) for t in range(0, years + 1)]
 
         # Use inverted exponential progression to calculate the automation rate over the years
-        automation_rates = exponential_progression_inverted(automation_rate / 100, years)
+        automation_rates = exponential_progression_inverted(automation_rate / 100, years, min_rate=0.001)
 
         # Initialize list to store time spent each year
         time_spent_years = []
