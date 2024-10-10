@@ -189,9 +189,6 @@ if submit_button:
             else:
                 roi = 0
             roi_over_time.append(roi)
-    
-        # Processor Productivity Gains
-        non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
 
         # Calculate invoices per processor after automation
         if processors_saved < num_ap_processors:
