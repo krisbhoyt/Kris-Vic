@@ -199,12 +199,9 @@ if submit_button:
         xaxis_title='Year',
         yaxis_title='Amount ($)',
         plot_bgcolor=WHITE,
-        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+        legend=dict(title_font=dict(color=WHITE), font=dict(color=WHITE))
     )
     st.plotly_chart(roi_fig, use_container_width=True)
-
-    # Debugging step: Output the contents of time_per_invoice_years
-    st.write("Time Per Invoice Over Years:", time_per_invoice_years)
 
     # Ensure the function returns valid data
     if time_per_invoice_years:
@@ -238,7 +235,7 @@ if submit_button:
         xaxis_title='Year',
         yaxis_title='Net Savings ($)',
         plot_bgcolor=WHITE,
-        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+        legend=dict(title_font=dict(color=WHITE), font=dict(color=WHITE))
     )
 
     st.plotly_chart(net_savings_fig, use_container_width=True)
