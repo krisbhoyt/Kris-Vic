@@ -212,7 +212,7 @@ if submit_button:
     st.plotly_chart(roi_fig, use_container_width=True)
 
    # Create a line plot for time savings over years
-    fig.add_trace(go.Scatter(x=list(range(0, years + 1)), y=time_per_invoice_years,
+    fig.add_trace(go.Scatter(x=list(range(0, years + 1)), y=results['Time Per Invoice Over Years'],
                          mode='lines+markers',
                          name='Time Per Invoice (minutes)',
                          line=dict(color='#2E3B63')))
