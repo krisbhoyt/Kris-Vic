@@ -195,14 +195,6 @@ if submit_button:
     )
     st.plotly_chart(roi_fig, use_container_width=True)
 
-    time_spent_fig = go.Figure()
-
-    time_spent_fig.add_trace(go.Scatter(x=['Year 0', 'Year 1', 'Year 2', 'Year 3'],
-                                    y=time_spent_years_hours,
-                                    mode='lines+markers',
-                                    name='Time Spent (hours)',
-                                    line=dict(color=PRIMARY_COLOR)))
-
     # Convert time from minutes to hours for the calculations
     time_per_invoice_before_hours = time_per_invoice_before / 60
     time_per_invoice_after_hours = time_per_invoice_after / 60
@@ -234,7 +226,7 @@ if submit_button:
     time_spent_years_hours = [time / 60 for time in time_spent_years]
 
     # Correct indentation for return inside the function
-return {
+    return {
     "Time Spent Over 3 Years (hours)": time_spent_years_hours,
     }
 
