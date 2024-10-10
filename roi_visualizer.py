@@ -87,10 +87,10 @@ if submit_button:
 
         # Loop through the automation rates for each year and calculate time spent
         for rate in automation_rates:
-        # Start with maximum manual processing and reduce as automation progresses
-        non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
-        time_spent_year = non_automated_invoice_volume * time_per_invoice_before_hours  # Start with today's time spent
-        time_spent_years.append(time_spent_year)
+            # Start with maximum manual processing and reduce as automation progresses
+            non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
+            time_spent_year = non_automated_invoice_volume * time_per_invoice_before_hours  # Start with today's time spent
+            time_spent_years.append(time_spent_year)
 
         # Calculate total time spent before automation (Year 0)
         total_time_before_hours = annual_invoice_volume * time_per_invoice_before_hours
