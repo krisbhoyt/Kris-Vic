@@ -148,7 +148,8 @@ if submit_button:
             "Time Efficiency Gain": total_time_saved,
             "Processor Productivity Gains": invoices_per_processor_after,
             "Time Spent Over 3 Years (hours)": time_spent_years_hours,
-            "Net Savings ($)": net_savings
+            "Net Savings ($)": net_savings,
+            "Years": Years
         }
 
     # Calculate ROI with growth projection
