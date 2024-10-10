@@ -177,7 +177,6 @@ if submit_button:
             "Hours Saved": total_hours_saved,
             "Cumulative Savings": cumulative_savings,
             "Cumulative Investment": cumulative_investment,
-            "Automation Rates Over Time": automation_rates,
             "Processing Time Per Invoice (hours)": time_per_invoice_years,
             "Time Per Invoice Over Years": time_per_invoice_years,
             "Automation Rate Over Years": automation_rates
