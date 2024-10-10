@@ -84,15 +84,28 @@ if submit_button:
         # Total time saved considering only non-automated invoices
         total_time_saved_hours = time_saved_per_invoice_hours * non_automated_invoice_volume
 
-        # Calculate time spent for each year
+        # Total Time Spent w/o automation 
+        total_time_no_automation = time_per_invoice_before * annual_invoice_volume
+
+        # Initialize list to store time spent each year
+        time_spent_years = [total_time_no_automation]  # Start with no automation
+
+        # Check if automation_rate is valid
+        if not (0 <= automation_rate <= 100):
+            raise ValueError("Automation rate must be between 0 and 100")
+
+        # Simulate progressive automation over the years
+        automation_rates = np.linspace(0, automation_rate / 100, 3)  # Ensure automation_rate is a percentage
+
+        # Calculate time spent for each year as automation increases
         for rate in automation_rates:
             non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
             total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
             time_spent_years.append(total_time_with_automation)
 
-        # Total Time Spent w/o automation 
-        total_time_no_automation = time_per_invoice_before * annual_invoice_volume
-                                      
+        # Convert time spent from minutes to hours for visualization
+        time_spent_years_hours = [time / 60 for time in time_spent_years]
+
         # Assuming a standard work year (2,080 hours) per AP processor
         working_hours_per_year = 2080
 
@@ -103,37 +116,7 @@ if submit_button:
         processors_saved = min(processors_saved, num_ap_processors)
 
         # Calculate labor cost savings based on time saved
-        if processors_saved < 1:
-            total_labor_cost_savings = processors_saved / ap_processor_salary
-        else:
-            total_labor_cost_savings = processors_saved * ap_processor_salary
-
-            # Convert time from minutes to hours for the calculations
-        time_per_invoice_before_hours = time_per_invoice_before / 60
-        time_per_invoice_after_hours = time_per_invoice_after / 60
-
-        # Calculate the projected future invoice volume with realistic scaling
-        growth_multiplier = (1 + growth_rate / 100) ** years
-        annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
-
-        # Calculate total time spent before any automation (Year 0)
-        total_time_no_automation = time_per_invoice_before * annual_invoice_volume  # Year 0 (no automation)
-
-        # Initialize list to store time spent each year
-        time_spent_years = [total_time_no_automation]  # Start with no automation
-
-        # Check if automation_rate is valid
-        if not (0 <= automation_rate <= 100):
-        raise ValueError("Automation rate must be between 0 and 100")
-
-        # Simulate progressive automation over the years
-        automation_rates = np.linspace(0, automation_rate / 100, 3)  # Ensure automation_rate is a percentage
-
-        # Convert time spent from minutes to hours for visualization
-        time_spent_years_hours = [time / 60 for time in time_spent_years]
-
-        # Line chart to show time spent each year
-        time_spent_fig = go.Figure()
+        total_labor_cost_savings = processors_saved * ap_processor_salary
 
         # Early payer discount savings (realistic cap based on annual)
         early_payer_discount_savings = missed_discounts
@@ -148,7 +131,6 @@ if submit_button:
 
         # Time Efficiency Gains
         time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
-        non_automated_invoice_volume = current_invoice_volume * (1 - automation_rate / 100)
         total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
 
         # Processor Productivity Gains
