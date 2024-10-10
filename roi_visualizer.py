@@ -220,7 +220,8 @@ if submit_button:
             "Automation Rate Over Years": automation_rates,
             "Year One Costs": year_one_costs,
             "Total Implementation Cost": total_implementation_cost,
-            "Annual Recurring Cost": automation_system_cost
+            "Annual Recurring Cost": automation_system_cost,
+            "Automated Invoice Volume": automated_invoice_volume
         }
 
     # Calculate ROI with growth projection
@@ -244,7 +245,9 @@ if submit_button:
     st.markdown("### Efficiency Gains")
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Hours Saved", value=f"{int(results['Hours Saved']):,}")
-    col2.metric(label="Invoices / Processor (Year)", value=f"{int(results['Processor Productivity Gains']):.2f}")
+    col2.metric(label="Invoices Requiring Review", value=f"{int(results['Processor Productivity Gains']):.2f}")
+    col2.metric(label="Automated Invoices", value=f"{int(results['Processor Productivity Gains']):.2f}")
+    
     
     # Add another horizontal line
     st.markdown("---")
