@@ -130,6 +130,10 @@ if submit_button:
         # Define the number of years as an integer
         years = st.number_input('Number of Years for Projection', min_value=1, value=3)
 
+        # Ensure that net_savings has the correct number of values
+        if len(net_savings) != years:
+            raise ValueError("Mismatch between the number of years and net savings data points.")
+
         # Time Efficiency Gains
         time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
         total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
