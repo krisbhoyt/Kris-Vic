@@ -116,7 +116,9 @@ def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_pro
 
     # Calculate total hours saved from automation
     automated_invoice_volume = annual_invoice_volume * (automation_rate / 100)
-                                  
+
+    time_per_non_automated_invoice = initial_time_per_invoice - (automation_rate / 100) * (initial_time_per_invoice - time_per_invoice_after)
+                    
     # Total time spent for non-automated invoices
     non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
     total_time_non_automated = non_automated_invoice_volume * time_per_non_automated_invoice / 60
@@ -132,8 +134,6 @@ def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_pro
     time_saved_per_invoice = (initial_time_per_invoice - time_per_invoice_after) / 60
     
     total_hours_saved_from_automation = automated_invoice_volume * time_saved_per_invoice
-
-    time_per_non_automated_invoice = initial_time_per_invoice - (automation_rate / 100) * (initial_time_per_invoice - time_per_invoice_after)
                                   
     # Calculate the number of processors needed after automation for non-automated invoices
     working_hours_per_year = 2080
