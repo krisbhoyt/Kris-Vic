@@ -106,8 +106,8 @@ if submit_button:
         total_savings = total_labor_cost_savings + (early_payer_discount_savings * years)
 
         # Cumulative savings and investment over the years
-        cumulative_savings = total_savings * years
-        cumulative_investment = automation_system_cost * years
+        cumulative_savings = [total_savings * (year + 1) for year in range(years)]
+        cumulative_investment = [automation_system_cost * (year + 1) for year in range(years)]
         roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 for year in range(years)]
 
         # Time Efficiency Gains
@@ -181,6 +181,25 @@ if submit_button:
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
     st.plotly_chart(roi_fig, use_container_width=True)
+
+    time_saved_fig = go.Figure(data=[
+    go.Bar(name='Total Time Saved (hours)', x=['Total Time Saved'], y=[total_time_saved_hours], marker_color=PRIMARY_COLOR)
+])
+
+time_saved_fig.update_layout(
+    title='Total Time Saved Per Year (hours)',
+    xaxis_title='Savings Type',
+    yaxis_title='Time Saved (hours)',
+    plot_bgcolor=WHITE,
+    paper_bgcolor=WHITE,
+    font=dict(color=BLACK),
+    title_font=dict(size=16, color=BLACK)
+    yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+    xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+    legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+)
+
+st.plotly_chart(time_saved_fig, use_container_width=True)
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
