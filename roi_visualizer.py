@@ -199,11 +199,6 @@ if submit_button:
         xaxis_title='Year',
         yaxis_title='Amount ($)',
         plot_bgcolor=WHITE,
-        paper_bgcolor=WHITE,
-        font=dict(color=BLACK),
-        title_font=dict(size=16, color=BLACK),
-        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
     st.plotly_chart(roi_fig, use_container_width=True)
@@ -231,24 +226,6 @@ if submit_button:
     else:
         st.write("Error: No data generated for time per invoice.")
 
-   # Create a line plot for time savings over years
-    fig.add_trace(go.Scatter(x=list(range(0, years + 1)), y=time_per_invoice_years,
-                         mode='lines+markers',
-                         name='Time Per Invoice (minutes)',
-                         line=dict(color='#2E3B63')))
-    fig.update_layout(
-        title='Time to Process Invoice Over Years with Progressive Automation',
-        xaxis_title='Year',
-        yaxis_title='Time Per Invoice (minutes)',
-        plot_bgcolor='white',
-        paper_bgcolor='white',
-        font=dict(color='black'),
-        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),  # Correct formatting
-        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
     # Chart 3: Net Savings Over 3 Years
     net_savings_fig = go.Figure()
 
@@ -261,11 +238,6 @@ if submit_button:
         xaxis_title='Year',
         yaxis_title='Net Savings ($)',
         plot_bgcolor=WHITE,
-        paper_bgcolor=WHITE,
-        font=dict(color=BLACK),
-        title_font=dict(size=16, color=BLACK),
-        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
 
