@@ -234,7 +234,7 @@ if submit_button:
     time_spent_years_hours = [time / 60 for time in time_spent_years]
 
     # Correct indentation for return inside the function
-        return {
+return {
         "Time Spent Over 3 Years (hours)": time_spent_years_hours,
     }
 
