@@ -180,6 +180,10 @@ if submit_button:
             # If all processors are saved, then there's no manual work left
             invoices_per_processor_after = 0
 
+        year_one_costs = automation_system_cost + ap_implementation_fee + payments_implementation_fee
+        total_implementation_cost = ap_implementation_fee + payments_implementation_fee
+        annual_recurring_cost = year_one_costs
+                                      
         # Return results
         return {
             "Projected Invoice Volume": annual_invoice_volume,
@@ -196,7 +200,10 @@ if submit_button:
             "Cumulative Savings": cumulative_savings,
             "Cumulative Investment": cumulative_investment,
             "Time Per Invoice Over Years": time_per_invoice_years,
-            "Automation Rate Over Years": automation_rates
+            "Automation Rate Over Years": automation_rates,
+            "Year One Costs": year_one_costs,
+            "Total Implementation Cost": total_implementation_cost,
+            "Annual Recurring Cost": annual_recurring_cost
         }
 
     # Calculate ROI with growth projection
@@ -204,6 +211,13 @@ if submit_button:
                                   missed_discounts, initial_time_per_invoice, time_per_invoice_after, 
                                   automation_system_cost, automation_rate)
 
+    #Display Costs
+    st.markdown("### Costs to Customer)
+    col1, col2, col3 = st.columns(3)
+    col1.metric(label="Year 1 Costs", value=f"{int(results['Year One Costs']):,}")
+    col2.metric(label="Implementation Cost", value=f"{int(results['Total Implementation Cost']):,}")
+    col3.metric(label="Annual Recurring Cost", value=f"{int(results['Annual Recurring Cost']):,}")
+    
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
     col1, col2, col3 = st.columns(3)
