@@ -201,27 +201,40 @@ if submit_button:
     )
     st.plotly_chart(roi_fig, use_container_width=True)
 
-    time_spent_fig.add_trace(go.Scatter(x=['Year 0', 'Year 1', 'Year 2', 'Year 3'],
-                                    y=time_spent_years_hours,
-                                    mode='lines+markers',
-                                    name='Time Spent (hours)',
-                                    line=dict(color=PRIMARY_COLOR)))
+   # Initialize the Plotly figure
+    time_spent_fig = go.Figure()
 
+    # Ensure the number of years matches the data
+    years = ['Year 0', 'Year 1', 'Year 2', 'Year 3']
+    if len(time_spent_years_hours) != len(years):
+        raise ValueError("Mismatch between the number of years and time spent data points.")
+
+    # Add trace to the figure
+    time_spent_fig.add_trace(go.Scatter(
+        x=years,
+        y=time_spent_years_hours,
+        mode='lines+markers',
+        name='Time Spent (hours)',
+        line=dict(color=PRIMARY_COLOR)
+    ))
+
+    # Update the layout of the chart
     time_spent_fig.update_layout(
         title=dict(
-        text='Time Spent Over 3 Years with Progressive Automation',
-        font=dict(size=16, color=BLACK)
+            text='Time Spent Over 3 Years with Progressive Automation',
+            font=dict(size=16, color=BLACK)
     ),
-        xaxis_title='Year',
-        yaxis_title='Time Spent (hours)',
-        plot_bgcolor=WHITE,
-        paper_bgcolor=WHITE,
-        font=dict(color=BLACK),
-        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+    xaxis_title='Year',
+    yaxis_title='Time Spent (hours)',
+    plot_bgcolor=WHITE,
+    paper_bgcolor=WHITE,
+    font=dict(color=BLACK),
+    yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+    xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+    legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
 
+    # Render the chart in Streamlit
     st.plotly_chart(time_spent_fig, use_container_width=True)
 
     # Explanation of calculations
