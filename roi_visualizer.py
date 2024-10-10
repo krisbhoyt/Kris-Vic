@@ -115,8 +115,14 @@ if submit_button:
         non_automated_invoice_volume = annual_invoice_volume * (1 - (automation_rate / 100))
         total_time_saved_non_automated = non_automated_invoice_volume * (initial_time_per_invoice / 60 - time_per_invoice_after / 60)
 
-        # Calculate total hours saved correctly
-        total_hours_saved = total_time_saved_non_automated 
+        # Calculate the number of automated invoices
+        automated_invoice_volume = annual_invoice_volume * (automation_rate / 100)
+                                      
+        # Calculate the time saved per invoice (converted to hours)
+        time_saved_per_invoice = (initial_time_per_invoice - time_per_invoice_after) / 60
+    
+        # Calculate total hours saved from automation
+        total_hours_saved = automated_invoice_volume * time_saved_per_invoice
                                       
         # Ensure valid processors saved calculation
         working_hours_per_year = 2080
