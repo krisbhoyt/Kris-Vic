@@ -207,21 +207,54 @@ if submit_button:
                                     name='Time Spent (hours)',
                                     line=dict(color=PRIMARY_COLOR)))
 
+    # Visualization of Time Savings Over 3 Years
+    st.markdown("### Time Savings Over 3 Years")
+
+    # Current time spent without automation
+    annual_invoice_volume = current_invoice_volume * 12
+    total_time_no_automation = time_per_invoice_before * annual_invoice_volume  # Year 0 (no automation)
+
+    # Time saved per invoice after full automation
+    time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
+
+    # Initialize lists to store time spent each year
+    time_spent_years = [total_time_no_automation]  # Start with no automation
+    automation_rates = np.linspace(0, automation_rate / 100, 3)  # Progressively increase automation
+
+    # Calculate time spent for each year
+    for rate in automation_rates:
+    non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
+    total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
+    time_spent_years.append(total_time_with_automation)
+
+    # Convert time spent from minutes to hours for visualization
+    time_spent_years_hours = [time / 60 for time in time_spent_years]
+
+    # Line chart to show time spent each year
+    time_spent_fig = go.Figure()
+
+    time_spent_fig.add_trace(go.Scatter(x=['Year 0', 'Year 1', 'Year 2', 'Year 3'],
+                                    y=time_spent_years_hours,
+                                    mode='lines+markers',
+                                    name='Time Spent (hours)',
+                                    line=dict(color=PRIMARY_COLOR)))
+
     time_spent_fig.update_layout(
         title=dict(
         text='Time Spent Over 3 Years with Progressive Automation',
         font=dict(size=16, color=BLACK)
-        ),
+    ),
         xaxis_title='Year',
         yaxis_title='Time Spent (hours)',
         plot_bgcolor=WHITE,
         paper_bgcolor=WHITE,
-        font=dict(color=BLACK),
+        font=dict(color=BLACK)
         yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
-    )
-    st.plotly_chart(time_spent_fig, use_container_width=True)
+)
+
+st.plotly_chart(time_spent_fig, use_container_width=True)
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
