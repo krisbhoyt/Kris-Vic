@@ -120,6 +120,13 @@ def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_pro
     # Total time spent for non-automated invoices
     non_automated_invoice_volume = annual_invoice_volume - automated_invoice_volume
     total_time_non_automated = non_automated_invoice_volume * (time_per_invoice_after / 60)
+
+    # Adjust non_automated_invoice_volume and manual processing time
+    if time_per_invoice_after > 0:
+        remaining_manual_invoices = non_automated_invoice_volume * (initial_time_per_invoice / time_per_invoice_after)
+    else:
+        remaining_manual_invoices = non_automated_invoice_volume  # To avoid dividing by zero
+
     
     # Calculate the time saved per invoice (converted to hours)
     time_saved_per_invoice = (initial_time_per_invoice - time_per_invoice_after) / 60
