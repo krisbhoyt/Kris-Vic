@@ -120,9 +120,11 @@ def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_pro
     # Ensure that automated_invoice_volume does not exceed annual_invoice_volume
     automated_invoice_volume = min(automated_invoice_volume, annual_invoice_volume)
 
+    # Convert to a whole number (no decimals)
+    automated_invoice_volume = int(automated_invoice_volume)
                                   
     # Total time spent for non-automated invoices
-    non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
+    non_automated_invoice_volume = int(annual_invoice_volume * (1 - automation_rate / 100))
     total_time_non_automated = non_automated_invoice_volume * (time_per_invoice_after/ 60)
 
     # Adjust non_automated_invoice_volume and manual processing time
