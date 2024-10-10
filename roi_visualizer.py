@@ -85,25 +85,46 @@ if submit_button:
         # Initialize list to store time spent each year
         time_spent_years = []
 
-     # Debug: Print input variables to ensure they are correct
+        # Debug: Print input variables to ensure they are correct
         st.write("Automation Rates:", automation_rates)
         st.write("Annual Invoice Volume:", annual_invoice_volume)
         st.write("Time Per Invoice (Before/After in hours):", time_per_invoice_before_hours, time_per_invoice_after_hours)
-                                      
-        # Loop through the automation rates for each year and calculate time spent
+
+        # Loop through the automation rates for each year and calculate processing time per invoice
         for rate in automation_rates:
-            # Start with maximum manual processing and reduce as automation progresses
             non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
-            
-            avg_time_per_invoice_year = ((non_automated_invoice_volume * time_per_invoice_after_hours) + 
-                                         (annual_invoice_volume * rate * time_per_invoice_before_hours)) / annual_invoice_volume
-            time_per_invoice_years.append(avg_time_per_invoice_year)
+        
+        # Debug: Print rate and non-automated invoice volume
+        st.write(f"Year Rate: {rate}, Non-Automated Invoice Volume: {non_automated_invoice_volume}")
 
+        # Ensure we have a valid annual invoice volume to avoid division by zero
+        if annual_invoice_volume > 0 and time_per_invoice_before_hours > 0 and time_per_invoice_after_hours >= 0:
+            # Calculate the average time per invoice
+            try:
+                avg_time_per_invoice_year = ((non_automated_invoice_volume * time_per_invoice_after_hours) + 
+                                             (annual_invoice_volume * rate * time_per_invoice_before_hours)) / annual_invoice_volume
 
-        # Calculate the time per invoice before automation (Year 0)
-        avg_time_before_automation = time_per_invoice_before_hours
-        time_per_invoice_years = [avg_time_before_automation] + time_per_invoice_years
+                # Ensure the result is a valid number (i.e., not infinity or NaN)
+                if np.isfinite(avg_time_per_invoice_year):
+                    time_per_invoice_years.append(avg_time_per_invoice_year)
+                    st.write(f"Avg Time Per Invoice for Year: {avg_time_per_invoice_year}")
+                else:
+                    st.write("Error: avg_time_per_invoice_year is not a finite number.")
+                    time_per_invoice_years.append(0)  # Add default value if something goes wrong
 
+            except Exception as e:
+                st.write(f"Error in calculating avg_time_per_invoice_year: {e}")
+                time_per_invoice_years.append(0)  # Add default value in case of failure
+        else:
+            st.write("Error: Invalid input values, skipping calculation.")
+            time_per_invoice_years.append(0)  # Add default value in case of failure
+    
+    # Calculate the time per invoice before automation (Year 0)
+    avg_time_before_automation = time_per_invoice_before_hours
+    time_per_invoice_years = [avg_time_before_automation] + time_per_invoice_years  # Include time before automation as Year 0
+
+    # Debug: Print the results to ensure they're populated correctly
+    st.write("Time per Invoice over 3 Years:", time_per_invoice_years)
         # Calculate total time spent on non-automated invoices after automation
         total_time_after_hours = (annual_invoice_volume * (1 - automation_rate / 100)) * time_per_invoice_after_hours
 
