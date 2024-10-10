@@ -51,6 +51,8 @@ with st.form(key="roi_form"):
     missed_discounts = st.number_input('Missed Early Payer Discounts ($ per year)', min_value=0.00, value=20000.00)
     ap_implementation_fee = st.number_input('Implementation Fee', min_value=0.00, value=25000.00)
     payments_implementation_fee = st.number_input('Payments Implementation Fee', min_value=0.00, value=15000.00)
+    # AP Automation System Cost
+    automation_system_cost = st.number_input('Annual Recurring Cost', min_value=0.0, value=20000.0)
     
     # Time to process invoices before/after automation
     initial_time_per_invoice = st.number_input('Time to Process One Invoice Before Automation (minutes)', min_value=0.0, value=10.0)
