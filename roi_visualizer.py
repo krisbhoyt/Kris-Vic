@@ -235,7 +235,7 @@ if submit_button:
 
     # Correct indentation for return inside the function
 return {
-        "Time Spent Over 3 Years (hours)": time_spent_years_hours,
+    "Time Spent Over 3 Years (hours)": time_spent_years_hours,
     }
 
     # Line chart to show time spent each year
