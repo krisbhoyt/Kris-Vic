@@ -67,13 +67,19 @@ if submit_button:
         time_per_invoice_years = []
         automation_rates = []
         
-        # Calculate time reduction each year assuming exponential automation increase
+        # Loop through the years to simulate progressive automation
         for year in range(0, years + 1):
-            # Exponential progression of automation from 0% to target rate over the years
+            # Calculate the automation rate for the current year (using exponential progression)
             current_automation_rate = 1 - (1 - automation_rate / 100) ** (year / years)
-            time_per_invoice = initial_time * (1 - current_automation_rate)  # Time saved based on automation rate
+            
+            # Calculate the time saved for the current year
+            time_per_invoice = initial_time * (1 - current_automation_rate)
+            
+            # Append the time per invoice for the current year
             time_per_invoice_years.append(time_per_invoice)
-            automation_rates.append(current_automation_rate * 100)  # Store as percentage
+            
+            # Store the automation rate for the current year (as a percentage)
+            automation_rates.append(current_automation_rate * 100)
         
         return time_per_invoice_years, automation_rates
 
