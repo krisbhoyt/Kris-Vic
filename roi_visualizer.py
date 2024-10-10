@@ -82,7 +82,6 @@ if submit_button:
         non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
 
         # Total time saved considering only non-automated invoices
-
         total_time_saved_hours = time_saved_per_invoice_hours * non_automated_invoice_volume
 
         # Initialize lists to store time spent each year
@@ -148,6 +147,7 @@ if submit_button:
             "ROI Over Time": roi_over_time,
             "Time Efficiency Gain": total_time_saved,
             "Processor Productivity Gains": invoices_per_processor_after,
+            
         }
 
     # Calculate ROI with growth projection
@@ -198,10 +198,6 @@ if submit_button:
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
     st.plotly_chart(roi_fig, use_container_width=True)
-
-    time_saved_fig = go.Figure(data=[
-    go.Bar(name='Total Time Saved (hours)', x=['Total Time Saved'], y=[total_time_saved], marker_color=PRIMARY_COLOR)
-])
 
     time_spent_fig = go.Figure()
 
