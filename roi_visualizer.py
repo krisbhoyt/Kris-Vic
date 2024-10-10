@@ -89,15 +89,14 @@ if submit_button:
         for rate in automation_rates:
             # Start with maximum manual processing and reduce as automation progresses
             non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
-            time_spent_year = non_automated_invoice_volume * time_per_invoice_before_hours  # Start with today's time spent
-            time_spent_years.append(time_spent_year)
+            # Calculate the average time spent per invoice (combination of automated and non-automated)
+            avg_time_per_invoice_year = ((non_automated_invoice_volume * time_per_invoice_after_hours) + 
+                                         (annual_invoice_volume * rate * time_per_invoice_before_hours)) / annual_invoice_volume
+            time_per_invoice_years.append(avg_time_per_invoice_year)
 
-        # Calculate total time spent before automation (Year 0)
-        total_time_before_hours = annual_invoice_volume * time_per_invoice_before_hours
-        time_spent_years = [total_time_before_hours] + time_spent_years  # Include time before automation as Year 0
-
-        # Calculate total time spent before automation
-        total_time_before_hours = annual_invoice_volume * time_per_invoice_before_hours
+        # Calculate the time per invoice before automation (Year 0)
+        avg_time_before_automation = time_per_invoice_before_hours
+        time_per_invoice_years = [avg_time_before_automation] + time_per_invoice_years
 
         # Calculate total time spent on non-automated invoices after automation
         total_time_after_hours = (annual_invoice_volume * (1 - automation_rate / 100)) * time_per_invoice_after_hours
@@ -162,7 +161,7 @@ if submit_button:
         invoices_per_processor_after = non_automated_invoice_volume / remaining_processors if remaining_processors > 0 else 0
 
         total_hours_saved = (total_time_saved / 60)
-        per_invoice_processing_time = time_spent_years / annual_invoice_volume
+        
 
         # Return results
         return {
@@ -181,7 +180,7 @@ if submit_button:
             "Cumulative Savings": cumulative_savings,
             "Cumulative Investment": cumulative_investment,
             "Automation Rates Over Time": automation_rates,
-            "Hours per Invoice": per_invoice_processing_time
+            "Processing Time Per Invoice (hours)": time_per_invoice_years
         }
 
     # Calculate ROI with growth projection
@@ -242,7 +241,7 @@ if submit_button:
     # Time spent over 3 years should now correctly incorporate the exponential progression of automation
     time_spent_fig.add_trace(go.Scatter(
         x=years_list,
-        y=results['Hours per Invoice'],  # Data reflects exponential progression of automation
+        y=results['Processing Time Per Invoice (hours)'],  # Data reflects exponential progression of automation
         mode='lines+markers', 
         name='Time Spent (hours)',
         line=dict(color=PRIMARY_COLOR)
