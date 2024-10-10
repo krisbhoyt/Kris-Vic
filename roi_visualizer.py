@@ -143,7 +143,7 @@ if submit_button:
             "ROI Over Time": roi_over_time,
             "Time Efficiency Gain": total_time_saved,
             "Processor Productivity Gains": invoices_per_processor_after,
-            
+            "Time Spent Over 3 Years (hours)": time_spent_years_hours
         }
 
     # Calculate ROI with growth projection
@@ -224,11 +224,6 @@ if submit_button:
 
     # Convert time spent from minutes to hours for visualization
     time_spent_years_hours = [time / 60 for time in time_spent_years]
-
-    # Correct indentation for return inside the function
-    return {
-    "Time Spent Over 3 Years (hours)": time_spent_years_hours,
-    }
 
     # Line chart to show time spent each year
     time_spent_fig = go.Figure()
