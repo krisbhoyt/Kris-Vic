@@ -100,6 +100,10 @@ if submit_button:
             total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
             time_spent_years.append(total_time_with_automation)
 
+        
+        # Calculate the volume of non-automated invoices based on the automation rate
+        non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
+
         # Convert time spent from minutes to hours for visualization
         time_spent_years_hours = [time / 60 for time in time_spent_years]
 
@@ -142,6 +146,8 @@ if submit_button:
         # Processor Productivity Gains
         invoices_per_processor_before = current_invoice_volume / num_ap_processors
         invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
+
+        time_saved_in_days = total_time_saved / 24
                                       
         return {
             "Projected Invoice Volume": annual_invoice_volume,
@@ -165,7 +171,7 @@ if submit_button:
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
     col1, col2, col3 = st.columns(3)
-    col1.metric(label="Time Efficiency Gains", value=f"{int(results['Time Efficiency Gain']):,}")
+    col1.metric(label="Days Saved", value=f"{int(results['Time Efficiency Gain']):,}")
     col2.metric(label="Processor Productivity Gains", value=f"{int(results['Processor Productivity Gains']):.2f}")
 
     # Display key metrics in a 3x2 grid for clarity
