@@ -213,7 +213,7 @@ if submit_button:
     time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
 
     # Initialize lists to store time spent each year
-    time_spent_years = [total_time_no_automation]  # Start with no automation
+    time_spent_years = total_time_no_automation  # Start with no automation
     automation_rates = np.linspace(0, automation_rate / 100, 3)  # Progressively increase automation
 
     # Calculate time spent for each year
