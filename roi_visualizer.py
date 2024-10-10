@@ -76,6 +76,9 @@ if submit_button:
             automation_rates.append(current_automation_rate * 100)  # Store as percentage
         
         return time_per_invoice_years, automation_rates
+
+    # Call the function
+    time_per_invoice_years, automation_rates = calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years)
     
     # Function to calculate ROI, time saved, processors saved, and net savings
     def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
