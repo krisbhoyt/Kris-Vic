@@ -82,6 +82,10 @@ if submit_button:
         # Use inverted exponential progression to calculate the automation rate over the years
         automation_rates = exponential_progression_inverted(automation_rate / 100, years, min_rate=0.001)
 
+        # Calculate the time per invoice before automation (Year 0)
+        avg_time_before_automation = time_per_invoice_before_hours
+        time_per_invoice_years = [avg_time_before_automation] + time_per_invoice_years  # Include time before automation as Year 0
+
         # Initialize list to store time spent each year
         time_spent_years = []
 
@@ -118,10 +122,6 @@ if submit_button:
         else:
             st.write("Error: Invalid input values, skipping calculation.")
             time_per_invoice_years.append(0)  # Add default value in case of failure
-    
-        # Calculate the time per invoice before automation (Year 0)
-        avg_time_before_automation = time_per_invoice_before_hours
-        time_per_invoice_years = [avg_time_before_automation] + time_per_invoice_years  # Include time before automation as Year 0
     
         # Debug: Print the results to ensure they're populated correctly
         st.write("Time per Invoice over 3 Years:", time_per_invoice_years)
