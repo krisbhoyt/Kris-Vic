@@ -208,6 +208,29 @@ if submit_button:
     )
     st.plotly_chart(roi_fig, use_container_width=True)
 
+    # Debugging step: Output the contents of time_per_invoice_years
+    st.write("Time Per Invoice Over Years:", time_per_invoice_years)
+
+    # Ensure the function returns valid data
+    if time_per_invoice_years:
+        # Create the chart
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=list(range(0, years + 1)), y=time_per_invoice_years,
+                                 mode='lines+markers', name='Time Per Invoice (Minutes)'))
+    
+        # Update the layout of the plot
+        fig.update_layout(
+            title='Time to Process Invoice Over 3 Years with Automation',
+            xaxis_title='Years',
+            yaxis_title='Time Per Invoice (Minutes)',
+            plot_bgcolor='white'
+        )
+    
+        # Show the chart in Streamlit
+        st.plotly_chart(fig)
+    else:
+        st.write("Error: No data generated for time per invoice.")
+
    # Create a line plot for time savings over years
     fig.add_trace(go.Scatter(x=list(range(0, years + 1)), y=time_per_invoice_years,
                          mode='lines+markers',
