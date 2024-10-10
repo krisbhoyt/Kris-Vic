@@ -210,6 +210,8 @@ if submit_button:
     results = calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
                                   missed_discounts, initial_time_per_invoice, time_per_invoice_after, 
                                   automation_system_cost, automation_rate)
+    # Add another horizontal line
+    st.markdown("---")
 
     #Display Costs
     st.markdown("### Costs to Customer)
@@ -217,13 +219,19 @@ if submit_button:
     col1.metric(label="Year 1 Costs", value=f"{int(results['Year One Costs']):,}")
     col2.metric(label="Implementation Cost", value=f"{int(results['Total Implementation Cost']):,}")
     col3.metric(label="Annual Recurring Cost", value=f"{int(results['Annual Recurring Cost']):,}")
-    
+
+    # Add another horizontal line
+    st.markdown("---")      
+                
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Hours Saved", value=f"{int(results['Hours Saved']):,}")
     col2.metric(label="Invoices / Processor (Year)", value=f"{int(results['Processor Productivity Gains']):.2f}")
-
+    
+    # Add another horizontal line
+    st.markdown("---")
+                
     # Display key metrics in a 3x2 grid for clarity
     st.markdown("### Key Metrics")
     col1, col2, col3 = st.columns(3)
