@@ -196,7 +196,7 @@ if submit_button:
         # Calculate invoices per processor after automation
         if processors_saved < num_ap_processors:
             remaining_processors = num_ap_processors - processors_saved
-            invoices_per_processor_after = non_automated_invoice_volume / remaining_processors if remaining_processors > 0 else 0
+            invoices_per_processor_after = (annual_invoice_volume - automated_invoice_volume) / remaining_processors
         else:
             # If all processors are saved, then there's no manual work left
             invoices_per_processor_after = 0
