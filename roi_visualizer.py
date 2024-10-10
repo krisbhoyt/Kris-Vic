@@ -126,7 +126,7 @@ if submit_button:
         processors_saved = min(processors_saved, num_ap_processors)
     
         # Calculate labor cost savings based on time saved
-        if processors saved < 1:
+        if processors_saved < 1:
             total_labor_cost_savings = processors_saved / ap_processor_salary
         else:
             total_labor_cost_savings = processors_saved * ap_processor_salary
