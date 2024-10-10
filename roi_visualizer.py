@@ -95,11 +95,11 @@ if submit_button:
     
     # Function to calculate ROI, time saved, processors saved, and net savings
     def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
-                                  missed_discounts, time_per_invoice_before, time_per_invoice_after, 
+                                  missed_discounts, initial_time_per_invoice, time_per_invoice_after, 
                                   automation_system_cost, automation_rate):
         
         # Call the function to get time savings per year
-        time_per_invoice_years, automation_rates = calculate_time_per_invoice_over_years(time_per_invoice_before, automation_rate, years)
+        time_per_invoice_years, automation_rates = calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years)
     
         # Ensure that the annual invoice volume is calculated correctly
         growth_multiplier = (1 + growth_rate / 100) ** years
@@ -164,7 +164,7 @@ if submit_button:
 
     # Calculate ROI with growth projection
     results = calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
-                                  missed_discounts, time_per_invoice_before, time_per_invoice_after, 
+                                  missed_discounts, initial_time_per_invoice, time_per_invoice_after, 
                                   automation_system_cost, automation_rate)
 
     # Display Efficiency Metrics
