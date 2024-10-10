@@ -201,6 +201,13 @@ if submit_button:
             # If all processors are saved, then there's no manual work left
             invoices_per_processor_after = 0
 
+        # Debugging outputs for clarity
+        st.write(f"Remaining Processors: {remaining_processors}")
+        st.write(f"Number of AP Processors: {num_ap_processors}")
+        st.write(f"Processors Saved: {processors_saved}")
+        st.write(f"Invoices Per Processor After Automation: {invoices_per_processor_after}")
+
+                                      
         year_one_costs = automation_system_cost + ap_implementation_fee + payments_implementation_fee
         total_implementation_cost = ap_implementation_fee + payments_implementation_fee
                                       
