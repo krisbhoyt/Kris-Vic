@@ -42,7 +42,7 @@ st.write("This tool helps calculate the return on investment (ROI) for automatin
 
 # Input fields for executive-level metrics
 st.markdown("### Key Metrics")
-with st.form(key="roi_form"):
+
     # Input fields
     current_invoice_volume = st.number_input('Current Invoice Volume per Month', min_value=0, value=5000)
     growth_rate = st.number_input('Projected Growth Rate (%)', min_value=0, max_value=100, value=10)
@@ -67,7 +67,7 @@ with st.form(key="roi_form"):
     # Submit button
     submit_button = st.form_submit_button(label="Calculate ROI")
 
-if submit_button:
+
     # Function to calculate progressive time savings over years
     def calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years):
         time_per_invoice_years = []
