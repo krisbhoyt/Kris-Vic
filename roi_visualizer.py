@@ -71,8 +71,8 @@ if submit_button:
                                   automation_system_cost, automation_rate):
         
         # Convert time from minutes to hours for the calculations
-        time_per_invoice_before_hours = time_per_invoice_before / 60
-        time_per_invoice_after_hours = time_per_invoice_after / 60
+        time_per_invoice_before_hours = (annual_invoice_volume * time_per_invoice_before) / 60
+        time_per_invoice_after_hours = (non_automated_invoice_volume * time_per_invoice_after) / 60
 
         # Calculate time saved per invoice
         time_saved_per_invoice_hours = time_per_invoice_before_hours - time_per_invoice_after_hours
@@ -109,12 +109,6 @@ if submit_button:
         # Assuming a standard work year (2,080 hours) per AP processor
         working_hours_per_year = 2080
 
-        # Calculate the total time to process all invoices before automation (hours)
-        total_time_before_hours = (annual_invoice_volume * time_per_invoice_before) / 60
-        
-        # Calculate the total time to process only non-automated invoices after automation (hours)
-        total_time_after_hours = (non_automated_invoice_volume * time_per_invoice_after) / 60
-                                      
         # Calculate processors saved based on total time saved
         total_time_saved_hours = total_time_before_hours - total_time_after_hours
         processors_saved = total_time_saved_hours / working_hours_per_year
