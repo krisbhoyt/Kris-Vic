@@ -152,14 +152,14 @@ if submit_button:
         total_savings = total_labor_cost_savings + early_payer_discount_savings
 
         # Investment in AP automation system (implementation fees only in Year 0)
-            total_investment = []
-            for year in range(years):
-                if year == 0:
-                    # Year 0 includes implementation fees
-                    total_investment.append(automation_system_cost + ap_implementation_fee + payments_implementation_fee)
-                else:
-                    # Subsequent years only include the recurring system cost
-                    total_investment.append(automation_system_cost)
+        total_investment = []
+        for year in range(years):
+            if year == 0:
+                # Year 0 includes implementation fees
+                total_investment.append(automation_system_cost + ap_implementation_fee + payments_implementation_fee)
+            else:
+                # Subsequent years only include the recurring system cost
+                total_investment.append(automation_system_cost)
                                       
         # Cumulative savings and investment over the years
         cumulative_savings = [total_savings * (year + 1) for year in range(years)]
