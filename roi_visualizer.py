@@ -116,16 +116,17 @@ if submit_button:
         
         # Total time saved is the difference between year 0 (no automation) and year N (full automation)
         total_time_saved_hours = total_time_saved_years[0] - total_time_saved_years[-1]
-        
+
+        # Calculate total hours saved from automation
+        automated_invoice_volume = annual_invoice_volume * (automation_rate / 100)
+                                      
         # Total time spent for non-automated invoices
-        non_automated_invoice_volume = annual_invoice_volume * (1 - (automation_rate / 100))
+        non_automated_invoice_volume = annual_invoice_volume - automated_invoice_volume
         total_time_non_automated = non_automated_invoice_volume * (time_per_invoice_after / 60)
         
         # Calculate the time saved per invoice (converted to hours)
         time_saved_per_invoice = (initial_time_per_invoice - time_per_invoice_after) / 60
         
-        # Calculate total hours saved from automation
-        automated_invoice_volume = annual_invoice_volume * (automation_rate / 100)
         total_hours_saved_from_automation = automated_invoice_volume * time_saved_per_invoice
 
         time_per_non_automated_invoice = (initial_time_per_invoice - time_per_invoice_after) / 60
@@ -195,8 +196,7 @@ if submit_button:
         # Calculate invoices per processor after automation
         if processors_saved < num_ap_processors:
             remaining_processors = num_ap_processors - processors_saved
-            non_automated_invoice_volume = annual_invoice_volume * (1 - (automation_rate / 100))
-            invoices_per_processor_after = non_automated_invoice_volume / remaining_processors
+            invoices_per_processor_after = non_automated_invoice_volume / remaining_processors if remaining_processors > 0 else 0
         else:
             # If all processors are saved, then there's no manual work left
             invoices_per_processor_after = 0
