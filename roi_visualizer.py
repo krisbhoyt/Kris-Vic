@@ -124,9 +124,6 @@ if submit_button:
         non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
         invoices_per_processor_after = non_automated_invoice_volume / max(num_ap_processors - processors_saved, 1)
 
-        total_hours_saved = (total_time_saved / 60)
-        
-
         # Return results
         return {
             "Projected Invoice Volume": annual_invoice_volume,
@@ -135,14 +132,13 @@ if submit_button:
             "Total Savings ($)": total_savings,
             "Net Savings": net_savings,
             "Processors Saved": processors_saved,
-            "Time Efficiency Gain": total_time_saved,
+            "Time Efficiency Gain": total_time_saved_hours,
             "Processor Productivity Gains": invoices_per_processor_after,
-            "ROI (%)": roi_final,
+            "ROI (%)": roi_over_time[-1],
             "ROI Over Time": roi_over_time,
             "Hours Saved": total_hours_saved,
             "Cumulative Savings": cumulative_savings,
             "Cumulative Investment": cumulative_investment,
-            "Processing Time Per Invoice (hours)": time_per_invoice_years,
             "Time Per Invoice Over Years": time_per_invoice_years,
             "Automation Rate Over Years": automation_rates
         }
