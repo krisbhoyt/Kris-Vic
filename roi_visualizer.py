@@ -82,8 +82,25 @@ if submit_button:
         non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
 
         # Total time saved considering only non-automated invoices
+
         total_time_saved_hours = time_saved_per_invoice_hours * non_automated_invoice_volume
 
+        # Initialize lists to store time spent each year
+        time_spent_years = [total_time_no_automation]  # Start with no automation
+        automation_rates = np.linspace(0, automation_rate / 100, 3)
+
+        # Calculate time spent for each year
+        for rate in automation_rates:
+            non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
+            total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
+            time_spent_years.append(total_time_with_automation)
+
+# Convert time spent from minutes to hours for visualization
+time_spent_years_hours = [time / 60 for time in time_spent_years]
+
+        # Total Time Spent w/o automation 
+        total_time_no_automation = time_per_invoice_before * annual_invoice_volume
+                                      
         # Assuming a standard work year (2,080 hours) per AP processor
         working_hours_per_year = 2080
 
@@ -183,23 +200,32 @@ if submit_button:
     st.plotly_chart(roi_fig, use_container_width=True)
 
     time_saved_fig = go.Figure(data=[
-    go.Bar(name='Total Time Saved (hours)', x=['Total Time Saved'], y=[total_time_saved_hours], marker_color=PRIMARY_COLOR)
+    go.Bar(name='Total Time Saved (hours)', x=['Total Time Saved'], y=[total_time_saved], marker_color=PRIMARY_COLOR)
 ])
 
-    time_saved_fig.update_layout(
-        title='Total Time Saved Per Year (hours)',
-        xaxis_title='Savings Type',
-        yaxis_title='Time Saved (hours)',
+    time_spent_fig = go.Figure()
+
+    time_spent_fig.add_trace(go.Scatter(x=['Year 0', 'Year 1', 'Year 2', 'Year 3'],
+                                    y=time_spent_years_hours,
+                                    mode='lines+markers',
+                                    name='Time Spent (hours)',
+                                    line=dict(color=PRIMARY_COLOR)))
+
+    time_spent_fig.update_layout(
+        title=dict(
+        text='Time Spent Over 3 Years with Progressive Automation',
+        font=dict(size=16, color=BLACK)
+        ),
+        xaxis_title='Year',
+        yaxis_title='Time Spent (hours)',
         plot_bgcolor=WHITE,
         paper_bgcolor=WHITE,
         font=dict(color=BLACK),
-        title_font=dict(size=16, color=BLACK),
         yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
-)
 
-    st.plotly_chart(time_saved_fig, use_container_width=True)
+st.plotly_chart(time_spent_fig, use_container_width=True)
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
