@@ -113,7 +113,10 @@ def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_pro
     
     # Total time saved is the difference between year 0 (no automation) and year N (full automation)
     total_time_saved_hours = total_time_saved_years[0] - total_time_saved_years[-1]
-    
+
+    # Calculate automated and non-automated invoice volumes based on the automation rate
+    automated_invoice_volume = annual_invoice_volume * (automation_rate / 100)
+                                  
     # Ensure that automated_invoice_volume does not exceed annual_invoice_volume
     automated_invoice_volume = min(automated_invoice_volume, annual_invoice_volume)
                     
