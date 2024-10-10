@@ -43,24 +43,26 @@ st.write("This tool helps calculate the return on investment (ROI) for automatin
 # Input fields for executive-level metrics
 st.markdown("### Key Metrics")
 with st.form(key="roi_form"):
+    # Input fields
     current_invoice_volume = st.number_input('Current Invoice Volume per Month', min_value=0, value=5000)
-    growth_rate = st.number_input('Projected Growth Rate (%)', min_value=0, max_value=100, value=2)
-    ap_processor_salary = st.number_input('AP Processor Salary ($)', min_value=0.00, value=55000.00)
-    num_ap_processors = st.number_input('Number of AP Processors', min_value=0, value=5)
-    missed_discounts = st.number_input('Missed Early Payer Discounts ($ per year)', min_value=0.00, value=25000.00)
+    growth_rate = st.number_input('Projected Growth Rate (%)', min_value=0, max_value=100, value=10)
+    ap_processor_salary = st.number_input('AP Processor Salary ($)', min_value=0.00, value=50000.00)
+    num_ap_processors = st.number_input('Number of AP Processors', min_value=1, value=3)
+    missed_discounts = st.number_input('Missed Early Payer Discounts ($ per year)', min_value=0.00, value=20000.00)
+    ap_implementation_fee = st.number_input('Implementation Fee', min_value=0.00, value=25000.00)
+    payments_implementation_fee = st.number_input('Payments Implementation Fee', min_value=0.00, value=15000.00)
     
-    # Time to process one invoice before and after automation (in minutes)
-    initial_time_per_invoice = st.number_input('Initial Time to Process One Invoice (minutes)', min_value=0.0, value=8.0)
-    time_per_invoice_after = st.number_input('Time to Process One Invoice After Automation (minutes)', min_value=0.0, value=1.5)
+    # Time to process invoices before/after automation
+    initial_time_per_invoice = st.number_input('Time to Process One Invoice Before Automation (minutes)', min_value=0.0, value=10.0)
+    time_per_invoice_after = st.number_input('Time to Process One Invoice After Automation (minutes)', min_value=0.0, value=2.0)
     
     # Automation rate
     automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=100, value=70)
-
-    automation_system_cost = st.number_input('AP Automation System Cost ($ per year)', min_value=0.00, value=120000.00)
-    ap_implementation_fee = st.number_input('Implementation Fee', min_value=0.00, value=25000.00)
-    payments_implementation_fee = st.numberinput('Payments Implementation Fee', min_value=0.00, value=0.00)
+    
+    # Number of years for the projection
     years = st.number_input('Number of Years for Projection', min_value=1, value=3)
 
+    # Submit button
     submit_button = st.form_submit_button(label="Calculate ROI")
 
 if submit_button:
