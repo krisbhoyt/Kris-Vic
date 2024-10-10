@@ -239,14 +239,17 @@ if submit_button:
                          mode='lines+markers',
                          name='Time Per Invoice (minutes)',
                          line=dict(color='#2E3B63')))
-    fig.update_layout(title='Time to Process Invoice Over Years with Progressive Automation',
-                      xaxis_title='Year',
-                      yaxis_title='Time Per Invoice (minutes)',
-                      plot_bgcolor='white',
-                      font=dict(color='black'))
-                    yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-                    xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-                    legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+    fig.update_layout(
+        title='Time to Process Invoice Over Years with Progressive Automation',
+        xaxis_title='Year',
+        yaxis_title='Time Per Invoice (minutes)',
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font=dict(color='black'),
+        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),  # Correct formatting
+        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+)
     st.plotly_chart(fig, use_container_width=True)
 
     # Chart 3: Net Savings Over 3 Years
