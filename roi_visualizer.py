@@ -57,7 +57,7 @@ with st.form(key="roi_form"):
     automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=100, value=70)
 
     automation_system_cost = st.number_input('AP Automation System Cost ($ per year)', min_value=0.00, value=120000.00)
-    ap_implementation_fee = st.number_input('Implementation Fee'), min_value=0.00, value=25,000.00)
+    ap_implementation_fee = st.number_input('Implementation Fee'), min_value=0.00, value=25000.00)
     payments_implementation_fee = st.numberinput('Payments Implementation Fee'), min_value=0.00, value=0.00)
     years = st.number_input('Number of Years for Projection', min_value=1, value=3)
 
