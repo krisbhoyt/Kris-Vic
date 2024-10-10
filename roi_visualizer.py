@@ -99,7 +99,6 @@ if submit_button:
             non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
             total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
             time_spent_years.append(total_time_with_automation)
-
         
         # Calculate the volume of non-automated invoices based on the automation rate
         non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
@@ -110,8 +109,14 @@ if submit_button:
         # Assuming a standard work year (2,080 hours) per AP processor
         working_hours_per_year = 2080
 
+        # Calculate the total time to process all invoices before automation (hours)
+        total_time_before_hours = (annual_invoice_volume * time_per_invoice_before) / 60
+        
+        # Calculate the total time to process only non-automated invoices after automation (hours)
+        total_time_after_hours = (non_automated_invoice_volume * time_per_invoice_after) / 60
+                                      
         # Calculate processors saved based on total time saved
-        total_time_saved_hours = time_saved_per_invoice_hours * non_automated_invoice_volume
+        total_time_saved_hours = total_time_before_hours - total_time_after_hours
         processors_saved = total_time_saved_hours / working_hours_per_year
 
         # Ensure processors saved does not exceed the number of AP processors
@@ -160,7 +165,8 @@ if submit_button:
             "Processor Productivity Gains": invoices_per_processor_after,
             "Time Spent Over 3 Years (hours)": time_spent_years_hours,
             "ROI (%)": roi_final,  # Add the final ROI to the results
-            "ROI Over Time": roi_over_time  # ROI over each year
+            "ROI Over Time": roi_over_time,  # ROI over each year
+            "Days Saved"": time_saved_in_days 
         }
 
     # Calculate ROI with growth projection
