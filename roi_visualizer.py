@@ -54,7 +54,7 @@ with st.form(key="roi_form"):
     time_per_invoice_after = st.number_input('Time to Process One Invoice After Automation (minutes)', min_value=0.0, value=1.5)
     
     # Automation rate
-    automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=100, value=70)
+    automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=100, value=0)
 
     automation_system_cost = st.number_input('AP Automation System Cost ($ per year)', min_value=0.0, value=120000.0)
     years = st.number_input('Number of Years for Projection', min_value=1, value=3)
