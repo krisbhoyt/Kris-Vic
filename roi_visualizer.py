@@ -126,14 +126,17 @@ if submit_button:
         processors_saved = min(processors_saved, num_ap_processors)
     
         # Calculate labor cost savings based on time saved
-        total_labor_cost_savings = processors_saved * ap_processor_salary
+        total_labor_cost_savings = total_hours_saved * (ap_processor_salary / working_hours_per_year)
     
         # Early payer discount savings (realistic cap based on annual)
         early_payer_discount_savings = missed_discounts
     
         # Total savings (labor cost + early payer discounts)
         total_savings = total_labor_cost_savings + early_payer_discount_savings
-    
+
+        # Investment in AP automation system
+        total_investment = automation_system_cost * years
+                                      
         # Cumulative savings and investment over the years
         cumulative_savings = [total_savings * (year + 1) for year in range(years)]
         cumulative_investment = [automation_system_cost * (year + 1) for year in range(years)]
