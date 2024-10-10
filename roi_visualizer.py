@@ -242,6 +242,9 @@ if submit_button:
     col3.metric(label="Total Savings ($)", value=f"${results['Total Savings ($)']:.2f}")
     col3.metric(label="ROI (%)", value=f"{results['ROI (%)']:.2f}%")
 
+    # Add another horizontal line
+    st.markdown("---")
+    
     # Generate charts, each on its own line for better visibility
     st.markdown("### Visualization of Savings")
 
