@@ -50,7 +50,7 @@ with st.form(key="roi_form"):
     missed_discounts = st.number_input('Missed Early Payer Discounts ($ per year)', min_value=0.00, value=25000.00)
     
     # Time to process one invoice before and after automation (in minutes)
-    time_per_invoice_before = st.number_input('Time to Process One Invoice Before Automation (minutes)', min_value=0.0, value=8.0)
+    initial_time_per_invoice = st.number_input('Initial Time to Process One Invoice (minutes)', min_value=0.0, value=8.0)
     time_per_invoice_after = st.number_input('Time to Process One Invoice After Automation (minutes)', min_value=0.0, value=1.5)
     
     # Automation rate
