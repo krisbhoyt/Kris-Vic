@@ -214,7 +214,7 @@ if submit_button:
     st.markdown("---")
 
     #Display Costs
-    st.markdown("### Costs to Customer)
+    st.markdown("### Costs to Customer")
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Year 1 Costs", value=f"{int(results['Year One Costs']):,}")
     col2.metric(label="Implementation Cost", value=f"{int(results['Total Implementation Cost']):,}")
