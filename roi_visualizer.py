@@ -209,7 +209,7 @@ if submit_button:
     st.plotly_chart(roi_fig, use_container_width=True)
 
    # Create a line plot for time savings over years
-    fig.add_trace(go.Scatter(x=list(range(0, years + 1)), y=results['Time Per Invoice Over Years'],
+    fig.add_trace(go.Scatter(x=list(range(0, years + 1)), y=time_per_invoice_years,
                          mode='lines+markers',
                          name='Time Per Invoice (minutes)',
                          line=dict(color='#2E3B63')))
@@ -223,7 +223,7 @@ if submit_button:
         yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),  # Correct formatting
         xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
-)
+    )
     st.plotly_chart(fig, use_container_width=True)
 
     # Chart 3: Net Savings Over 3 Years
