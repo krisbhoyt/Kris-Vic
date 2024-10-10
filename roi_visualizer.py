@@ -162,12 +162,35 @@ if submit_button:
             else:
                 # Subsequent years only include the recurring system cost
                 total_investment.append(automation_system_cost)
-                                      
+
         # Cumulative savings and investment over the years
-        cumulative_savings = [total_savings * (year + 1) for year in range(years)]
-        cumulative_investment = [automation_system_cost * (year + 1) for year in range(years)]
-        net_savings = [cumulative_savings[year] - cumulative_investment[year] for year in range(years)]
-        roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 for year in range(years)]
+        cumulative_savings = []
+        cumulative_investment = []
+        net_savings = []
+        roi_over_time = []
+        
+        # Loop through each year and calculate cumulative values
+        for year in range(years):
+            # Cumulative savings should reflect the growing savings year by year
+            cumulative_saving = total_savings * (year + 1)  # Multiply by (year + 1) to accumulate savings over time
+            cumulative_savings.append(cumulative_saving)
+            
+            # Investment should accumulate year by year as well
+            if year == 0:
+                cumulative_investment.append(automation_system_cost + ap_implementation_fee + payments_implementation_fee)  # Year 0 includes fees
+            else:
+                cumulative_investment.append(cumulative_investment[year-1] + automation_system_cost)  # Add only the system cost after Year 0
+        
+            # Calculate net savings
+            net_saving = cumulative_savings[year] - cumulative_investment[year]
+            net_savings.append(net_saving)
+            
+            # Calculate ROI
+            if cumulative_investment[year] > 0:  # Avoid division by zero
+                roi = (cumulative_savings[year] / cumulative_investment[year]) * 100
+            else:
+                roi = 0
+            roi_over_time.append(roi)
     
         # Processor Productivity Gains
         non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
