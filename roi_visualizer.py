@@ -9,7 +9,7 @@ BLACK = "#000000"  # Black for all text on charts (labels, titles, axes)
 
 # Apply custom CSS for professional look
 st.markdown(
-    f"""
+    f'''
     <style>
     .reportview-container {{
         background-color: {WHITE};
@@ -33,7 +33,7 @@ st.markdown(
         padding-top: 10px;
     }}
     </style>
-    """, unsafe_allow_html=True
+    ''', unsafe_allow_html=True
 )
 
 # App title with branding colors
@@ -57,67 +57,82 @@ with st.form(key="roi_form"):
     automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=100, value=70)
 
     automation_system_cost = st.number_input('AP Automation System Cost ($ per year)', min_value=0.0, value=120000.0)
-    years = st.number_input('Number of Years for Projection', min_value=1, value=3, step=1)
+    years = st.number_input('Number of Years for Projection', min_value=1, value=3)
 
     submit_button = st.form_submit_button(label="Calculate ROI")
 
 if submit_button:
-    # Debug: Check the value of years
-    st.write(f"Number of years: {years}")
-
-    # Function to calculate ROI with realistic scaling
     def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
                                   missed_discounts, time_per_invoice_before, time_per_invoice_after, 
                                   automation_system_cost, automation_rate):
-
+        
         # Calculate the projected future invoice volume with realistic scaling
         growth_multiplier = (1 + growth_rate / 100) ** years
-        annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volum
-                                      
+        annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
+
         # Convert time from minutes to hours for the calculations
-        time_per_invoice_before_hours = (annual_invoice_volume * time_per_invoice_before) / 60
-        time_per_invoice_after_hours = (non_automated_invoice_volume * time_per_invoice_after) / 60
+        time_per_invoice_before_hours = time_per_invoice_before / 60
+        time_per_invoice_after_hours = time_per_invoice_after / 60
 
-        # Calculate time saved per invoice
-        time_saved_per_invoice_hours = time_per_invoice_before_hours - time_per_invoice_after_hours
+        # Define an inverted exponential curve for progressive automation
+        def exponential_progression_inverted(target_rate, years, lambd=0.7):
+            # Invert the exponential progression so that it starts at 0 and approaches the target rate
+            return [target_rate * (1 - np.exp(-lambd * t)) for t in range(0, years + 1)]
 
-        # Total Time Spent without automation (Year 0)
-        total_time_no_automation = time_per_invoice_before * annual_invoice_volume
+        # Use inverted exponential progression to calculate the automation rate over the years
+        automation_rates = exponential_progression_inverted(automation_rate / 100, years)
 
-        # Initialize list to store time spent each year (start with no automation)
-        time_spent_years = [total_time_no_automation]
+        # Initialize list to store time spent each year
+        time_spent_years = []
 
-        # Check if automation_rate is valid
-        if not (0 <= automation_rate <= 100):
-            raise ValueError("Automation rate must be between 0 and 100")
-
-        # Simulate progressive automation over the years (e.g., increasing automation from 0% to specified rate)
-        automation_rates = np.linspace(0, automation_rate / 100, 3)
-
-        # Calculate time spent for each year as automation increases
+        # Loop through the automation rates for each year and calculate time spent
         for rate in automation_rates:
-            non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
-            total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
-            time_spent_years.append(total_time_with_automation)
-        
-        # Calculate the volume of non-automated invoices based on the automation rate
-        non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
+        # Start with maximum manual processing and reduce as automation progresses
+        non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
+        time_spent_year = non_automated_invoice_volume * time_per_invoice_before_hours  # Start with today's time spent
+        time_spent_years.append(time_spent_year)
 
-        # Convert time spent from minutes to hours for visualization
-        time_spent_years_hours = [time / 60 for time in time_spent_years]
+        # Calculate total time spent before automation (Year 0)
+        total_time_before_hours = annual_invoice_volume * time_per_invoice_before_hours
+        time_spent_years = [total_time_before_hours] + time_spent_years  # Include time before automation as Year 0
+
+        # Calculate total time spent before automation
+        total_time_before_hours = annual_invoice_volume * time_per_invoice_before_hours
+
+        # Calculate total time spent on non-automated invoices after automation
+        total_time_after_hours = (annual_invoice_volume * (1 - automation_rate / 100)) * time_per_invoice_after_hours
+
+        # Total time saved is the difference between total time spent before and after automation
+        total_time_saved_hours = total_time_before_hours - total_time_after_hours
 
         # Assuming a standard work year (2,080 hours) per AP processor
         working_hours_per_year = 2080
 
-        # Calculate processors saved based on total time saved
-        total_time_saved_hours = total_time_before_hours - total_time_after_hours
-        processors_saved = total_time_saved_hours / working_hours_per_year
+        # Calculate total workload in hours for all processors
+        total_workload_before = num_ap_processors * working_hours_per_year
 
-        # Ensure processors saved does not exceed the number of AP processors
+        # Calculate how much of the total workload is reduced by automation
+        workload_reduced_by_automation = total_workload_before * (automation_rate / 100)
+
+        # Calculate processors saved based on workload reduction
+        processors_saved = workload_reduced_by_automation / working_hours_per_year
+
+        # Ensure processors saved doesn't exceed the current number of AP processors
         processors_saved = min(processors_saved, num_ap_processors)
 
-        # Calculate labor cost savings based on time saved
+        # Calculate labor cost savings based on processors saved
         total_labor_cost_savings = processors_saved * ap_processor_salary
+
+        # Define non-automated invoice volume for future use
+        non_automated_invoice_volume = current_invoice_volume * (1 - automation_rate / 100)
+
+        # Prevent division by zero or negative value when calculating invoices per processor after automation
+        remaining_processors = num_ap_processors - processors_saved
+
+        if remaining_processors > 0:
+            invoices_per_processor_after = non_automated_invoice_volume / remaining_processors
+        else:
+            invoices_per_processor_after = 0  # Set to 0 or another meaningful value if all processors are saved
 
         # Early payer discount savings (realistic cap based on annual)
         early_payer_discount_savings = missed_discounts
@@ -128,7 +143,7 @@ if submit_button:
         # Cumulative savings and investment over the years
         cumulative_savings = [total_savings * (year + 1) for year in range(years)]
         cumulative_investment = [automation_system_cost * (year + 1) for year in range(years)]
-        
+
         # Calculate net savings (savings - investment)
         net_savings = [cumulative_savings[year] - cumulative_investment[year] for year in range(years)]
 
@@ -140,14 +155,15 @@ if submit_button:
 
         # Time Efficiency Gains
         time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
-        total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
+        total_time_saved = time_saved_per_invoice * current_invoice_volume * (automation_rate / 100)
 
         # Processor Productivity Gains
         invoices_per_processor_before = current_invoice_volume / num_ap_processors
-        invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
+        invoices_per_processor_after = non_automated_invoice_volume / remaining_processors if remaining_processors > 0 else 0
 
-        time_saved_in_days = total_time_saved / 24
-                                      
+        total_hours_saved = (total_time_saved / 60)
+
+        # Return results
         return {
             "Projected Invoice Volume": annual_invoice_volume,
             "Labor Cost Savings ($)": total_labor_cost_savings,
@@ -157,10 +173,13 @@ if submit_button:
             "Processors Saved": processors_saved,
             "Time Efficiency Gain": total_time_saved,
             "Processor Productivity Gains": invoices_per_processor_after,
-            "Time Spent Over 3 Years (hours)": time_spent_years_hours,
-            "ROI (%)": roi_final,  # Add the final ROI to the results
-            "ROI Over Time": roi_over_time,  # ROI over each year
-            "Days Saved": time_saved_in_days 
+            "Time Spent Over 3 Years (hours)": time_spent_years,
+            "ROI (%)": roi_final,
+            "ROI Over Time": roi_over_time,
+            "Hours Saved": total_hours_saved,
+            "Cumulative Savings": cumulative_savings,
+            "Cumulative Investment": cumulative_investment,
+            "Automation Rates Over Time": automation_rates
         }
 
     # Calculate ROI with growth projection
@@ -171,8 +190,8 @@ if submit_button:
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
     col1, col2, col3 = st.columns(3)
-    col1.metric(label="Days Saved", value=f"{int(results['Time Efficiency Gain']):,}")
-    col2.metric(label="Processor Productivity Gains", value=f"{int(results['Processor Productivity Gains']):.2f}")
+    col1.metric(label="Hours Saved", value=f"{int(results['Hours Saved']):,}")
+    col2.metric(label="Invoices / Processor (Year)", value=f"{int(results['Processor Productivity Gains']):.2f}")
 
     # Display key metrics in a 3x2 grid for clarity
     st.markdown("### Key Metrics")
@@ -187,20 +206,74 @@ if submit_button:
     # Generate charts, each on its own line for better visibility
     st.markdown("### Visualization of Savings")
 
-    # Chart 1: Net Savings Over 3 Years
-    net_savings_fig = go.Figure()
+    # Chart 1: ROI Over 3 Years
+    roi_fig = go.Figure()
 
-    # Plot net savings over the specified years
-    net_savings_fig.add_trace(go.Scatter(
-        x=list(range(1, years + 1)),  # List of years [1, 2, 3, ..., years]
-        y=results['Net Savings'],     # Corresponding net savings values
-        mode='lines+markers',
-        name='Net Savings',
-        marker_color=PRIMARY_COLOR
+    # Plot cumulative savings
+    roi_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=results['Cumulative Savings'],
+                                 mode='lines+markers', name='Savings', marker_color=PRIMARY_COLOR))
+
+    # Plot cumulative investment
+    roi_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=results['Cumulative Investment'],
+                                 mode='lines+markers', name='Investment', marker_color='red'))
+
+    roi_fig.update_layout(
+        title='Cumulative Savings vs. Investment Over 3 Years',
+        xaxis_title='Year',
+        yaxis_title='Amount ($)',
+        plot_bgcolor=WHITE,
+        paper_bgcolor=WHITE,
+        font=dict(color=BLACK),
+        title_font=dict(size=16, color=BLACK),
+        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+    )
+    st.plotly_chart(roi_fig, use_container_width=True)
+
+    # Chart: Time Spent Over 3 Years with Exponential Automation
+    time_spent_fig = go.Figure()
+
+    # Years for the x-axis (including Year 0)
+    years_list = ['Year 0'] + [f'Year {i}' for i in range(1, years + 1)]
+
+    # Time spent over 3 years should now correctly incorporate the exponential progression of automation
+    time_spent_fig.add_trace(go.Scatter(
+        x=years_list,
+        y=results['Automation Rates Over Time'],  # Data reflects exponential progression of automation
+        mode='lines+markers', 
+        name='Time Spent (hours)',
+        line=dict(color=PRIMARY_COLOR)
     ))
 
+    # Update layout for the chart
+    time_spent_fig.update_layout(
+        title=dict(
+            text='Invoice Processing Time',
+            font=dict(size=16, color=BLACK)
+        ),
+        xaxis_title='Year',
+        yaxis_title='Time Spent (hours)',
+        plot_bgcolor=WHITE,
+        paper_bgcolor=WHITE,
+        font=dict(color=BLACK),
+        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+    )
+
+    # Display the chart in Streamlit
+    st.plotly_chart(time_spent_fig, use_container_width=True)
+
+    # Chart 3: Net Savings Over 3 Years
+    net_savings_fig = go.Figure()
+
+    # Plot net savings
+    net_savings_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=results['Net Savings'],
+                                         mode='lines+markers', name='Net Savings', marker_color=PRIMARY_COLOR))
+
     net_savings_fig.update_layout(
-        title='Net Savings vs. Investment Over 3 Years',
+        title='Net Savings Over 3 Years',
         xaxis_title='Year',
         yaxis_title='Net Savings ($)',
         plot_bgcolor=WHITE,
@@ -214,56 +287,9 @@ if submit_button:
 
     st.plotly_chart(net_savings_fig, use_container_width=True)
 
-    # Chart 2: Time Spent Over 3 Years
-    time_spent_fig = go.Figure()
-
-    time_spent_fig.add_trace(go.Scatter(x=['Year 0', 'Year 1', 'Year 2', 'Year 3'],
-                                    y=results['Time Spent Over 3 Years (hours)'],
-                                    mode='lines+markers',
-                                    name='Time Spent (hours)',
-                                    line=dict(color=PRIMARY_COLOR)))
-
-    time_spent_fig.update_layout(
-        title=dict(
-        text='Time Spent Over 3 Years with Progressive Automation',
-        font=dict(size=16, color=BLACK)
-    ),
-        xaxis_title='Year',
-        yaxis_title='Time Spent (hours)',
-        plot_bgcolor=WHITE,
-        paper_bgcolor=WHITE,
-        font=dict(color=BLACK),
-        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
-    )
-
-    st.plotly_chart(time_spent_fig, use_container_width=True)
-
-    # Chart 3: ROI Over Time
-    roi_fig = go.Figure()
-
-    roi_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=results['ROI Over Time'],
-                                 mode='lines+markers', name='ROI (%)', marker_color=PRIMARY_COLOR))
-
-    roi_fig.update_layout(
-        title='ROI Over 3 Years',
-        xaxis_title='Year',
-        yaxis_title='ROI (%)',
-        plot_bgcolor=WHITE,
-        paper_bgcolor=WHITE,
-        font=dict(color=BLACK),
-        title_font=dict(size=16, color=BLACK),
-        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
-    )
-
-    st.plotly_chart(roi_fig, use_container_width=True)
-
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
-    st.write(f"""
+    st.write(f'''
     **How We Calculate the ROI:**
     1. **Projected Invoice Volume**: We multiply the current monthly invoice volume by 12 to get the annual volume. Then, we apply the projected growth rate over {years} years.
     2. **Labor Cost Savings**: We calculate the total hours saved across all invoices, adjust it by the automation rate, and divide by the total annual working hours of a processor (2,080 hours). This gives us the number of processors saved, which is then multiplied by the processor's salary to calculate the labor cost savings.
@@ -271,4 +297,4 @@ if submit_button:
     4. **Early Payer Discounts**: Savings come from capturing discounts that would otherwise be missed.
     5. **Total Savings**: This includes both labor cost savings and early payer discount savings.
     6. **ROI**: The total savings are compared to the annual cost of the AP automation system to calculate the ROI as a percentage.
-    """)
+    ''')
