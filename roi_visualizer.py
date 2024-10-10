@@ -95,8 +95,8 @@ if submit_button:
             total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
             time_spent_years.append(total_time_with_automation)
 
-# Convert time spent from minutes to hours for visualization
-time_spent_years_hours = [time / 60 for time in time_spent_years]
+        # Convert time spent from minutes to hours for visualization
+        time_spent_years_hours = [time / 60 for time in time_spent_years]
 
         # Total Time Spent w/o automation 
         total_time_no_automation = time_per_invoice_before * annual_invoice_volume
