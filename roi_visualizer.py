@@ -194,6 +194,7 @@ if submit_button:
             roi_over_time.append(roi)
 
         # Calculate invoices per processor after automation
+        remaining_processors = num_ap_processors - processors_saved
         invoices_per_processor_after = (annual_invoice_volume - automated_invoice_volume) / remaining_processors
                                       
         year_one_costs = automation_system_cost + ap_implementation_fee + payments_implementation_fee
