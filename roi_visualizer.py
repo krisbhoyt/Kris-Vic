@@ -162,6 +162,7 @@ if submit_button:
         invoices_per_processor_after = non_automated_invoice_volume / remaining_processors if remaining_processors > 0 else 0
 
         total_hours_saved = (total_time_saved / 60)
+        per_invoice_processing_time = time_spent_years / annual_invoice_volume
 
         # Return results
         return {
@@ -180,6 +181,7 @@ if submit_button:
             "Cumulative Savings": cumulative_savings,
             "Cumulative Investment": cumulative_investment,
             "Automation Rates Over Time": automation_rates
+            "Hours per Invoice": per_invoice_processing_time
         }
 
     # Calculate ROI with growth projection
@@ -240,7 +242,7 @@ if submit_button:
     # Time spent over 3 years should now correctly incorporate the exponential progression of automation
     time_spent_fig.add_trace(go.Scatter(
         x=years_list,
-        y=results['Time Spent Over 3 Years (hours)'],  # Data reflects exponential progression of automation
+        y=results['Hours per Invoice'],  # Data reflects exponential progression of automation
         mode='lines+markers', 
         name='Time Spent (hours)',
         line=dict(color=PRIMARY_COLOR)
