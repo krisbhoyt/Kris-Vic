@@ -223,9 +223,9 @@ if submit_button:
 
     # Calculate time spent for each year
     for rate in automation_rates:
-    non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
-    total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
-    time_spent_years.append(total_time_with_automation)
+        non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
+        total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
+        time_spent_years.append(total_time_with_automation)
 
     # Convert time spent from minutes to hours for visualization
     time_spent_years_hours = [time / 60 for time in time_spent_years]
