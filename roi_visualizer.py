@@ -240,7 +240,7 @@ if submit_button:
     # Time spent over 3 years should now correctly incorporate the exponential progression of automation
     time_spent_fig.add_trace(go.Scatter(
         x=years_list,
-        y=results['Automation Rates Over Time'],  # Data reflects exponential progression of automation
+        y=results['Time Spent Over 3 Years (hours)],  # Data reflects exponential progression of automation
         mode='lines+markers', 
         name='Time Spent (hours)',
         line=dict(color=PRIMARY_COLOR)
