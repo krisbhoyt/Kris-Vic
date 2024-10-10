@@ -126,8 +126,11 @@ if submit_button:
         processors_saved = min(processors_saved, num_ap_processors)
     
         # Calculate labor cost savings based on time saved
-        total_labor_cost_savings = total_hours_saved * (ap_processor_salary / working_hours_per_year)
-    
+        if processors saved < 1:
+            total_labor_cost_savings = processors_saved / ap_processor_salary
+        else:
+            total_labor_cost_savings = processors_saved * ap_processor_salary
+            
         # Early payer discount savings (realistic cap based on annual)
         early_payer_discount_savings = missed_discounts
     
