@@ -183,9 +183,12 @@ if submit_button:
         }
 
     # Calculate ROI with growth projection
-    results = calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
-                                          missed_discounts, time_per_invoice_before, time_per_invoice_after, 
-                                          automation_system_cost, automation_rate):
+    results = calculate_roi_with_growth(
+        current_invoice_volume, growth_rate, years,
+        ap_processor_salary, num_ap_processors, 
+        missed_discounts, time_per_invoice_before, 
+        time_per_invoice_after,
+        automation_system_cost, automation_rate)
 
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
