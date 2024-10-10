@@ -190,7 +190,7 @@ if submit_button:
         title=dict(
             text='Cumulative Savings vs. Investment Over 3 Years',
             font=dict(size=16, color=BLACK)
-        ).
+        ),
         xaxis_title='Year',
         yaxis_title='Amount ($)',
         plot_bgcolor=WHITE,
@@ -242,7 +242,7 @@ if submit_button:
         title=dict(
             text='Net Savings vs. Investment Over 3 Years',
             font=dict(size=16, color=BLACK)
-        ).
+        ),
         xaxis_title='Year',
         yaxis_title='Net Savings ($)',
         plot_bgcolor=WHITE,
