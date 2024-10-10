@@ -194,19 +194,7 @@ if submit_button:
             roi_over_time.append(roi)
 
         # Calculate invoices per processor after automation
-        if processors_saved < num_ap_processors:
-            remaining_processors = num_ap_processors - processors_saved
-            invoices_per_processor_after = (annual_invoice_volume - automated_invoice_volume) / remaining_processors
-        else:
-            # If all processors are saved, then there's no manual work left
-            invoices_per_processor_after = 0
-
-        # Debugging outputs for clarity
-        st.write(f"Remaining Processors: {remaining_processors}")
-        st.write(f"Number of AP Processors: {num_ap_processors}")
-        st.write(f"Processors Saved: {processors_saved}")
-        st.write(f"Invoices Per Processor After Automation: {invoices_per_processor_after}")
-
+        invoices_per_processor_after = (annual_invoice_volume - automated_invoice_volume) / remaining_processors
                                       
         year_one_costs = automation_system_cost + ap_implementation_fee + payments_implementation_fee
         total_implementation_cost = ap_implementation_fee + payments_implementation_fee
@@ -267,7 +255,7 @@ if submit_button:
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Projected Invoice Volume", value=f"{int(results['Projected Invoice Volume']):,}")
     col1.metric(label="Labor Cost Savings ($)", value=f"${results['Labor Cost Savings ($)']:.2f}")
-    col2.metric(label="Processors Saved", value=f"{results['Processors Saved']:.2f}")
+    col2.metric(label="Repurposed Headcount", value=f"{results['Processors Saved']:.2f}")
     col2.metric(label="Early Payer Discount Savings ($)", value=f"${results['Early Payer Discount Savings ($)']:.2f}")
     col3.metric(label="Total Savings ($)", value=f"${results['Total Savings ($)']:.2f}")
     col3.metric(label="ROI (%)", value=f"{results['ROI (%)']:.2f}%")
