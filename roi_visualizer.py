@@ -127,6 +127,9 @@ if submit_button:
         # Calculate net savings (difference between savings and investment)
         net_savings = [cumulative_savings[year] - cumulative_investment[year] for year in range(years)]
 
+        # Define the number of years as an integer
+        years = st.number_input('Number of Years for Projection', min_value=1, value=3)
+
         # Time Efficiency Gains
         time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
         total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
