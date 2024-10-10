@@ -132,6 +132,21 @@ if submit_button:
         invoices_per_processor_before = current_invoice_volume / num_ap_processors
         invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
                                       
+        return {
+            "Projected Invoice Volume": annual_invoice_volume,
+            "Labor Cost Savings ($)": total_labor_cost_savings,
+            "Early Payer Discount Savings ($)": early_payer_discount_savings,
+            "Total Savings ($)": total_savings,
+            "ROI (%)": roi_over_time[-1],
+            "Processors Saved": processors_saved,
+            "Cumulative Savings": cumulative_savings,
+            "Cumulative Investment": cumulative_investment,
+            "ROI Over Time": roi_over_time,
+            "Time Efficiency Gain": total_time_saved,
+            "Processor Productivity Gains": invoices_per_processor_after,
+            "Time Spent Over 3 Years (hours)": time_spent_years_hours
+        }
+
     # Calculate ROI with growth projection
     results = calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
                                         missed_discounts, time_per_invoice_before, time_per_invoice_after, 
@@ -142,7 +157,7 @@ if submit_button:
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Time Efficiency Gains", value=f"{int(results['Time Efficiency Gain']):,}")
     col2.metric(label="Processor Productivity Gains", value=f"{int(results['Processor Productivity Gains']):.2f}")
-                
+
     # Display key metrics in a 3x2 grid for clarity
     st.markdown("### Key Metrics")
     col1, col2, col3 = st.columns(3)
@@ -181,35 +196,22 @@ if submit_button:
     )
     st.plotly_chart(roi_fig, use_container_width=True)
 
-    # Initialize the Plotly figure
+    # Time Savings Visualization
     time_spent_fig = go.Figure()
-
-    # Ensure the number of years matches the data
     years = ['Year 0', 'Year 1', 'Year 2', 'Year 3']
 
-    # Calculate time spent years hours
-    time_spent_years_hours = [time / 60 for time in time_spent_years]
+    # Add trace for time spent per year
+    time_spent_fig.add_trace(go.Scatter(x=years,
+                                        y=results['Time Spent Over 3 Years (hours)'],
+                                        mode='lines+markers',
+                                        name='Time Spent (hours)',
+                                        line=dict(color=PRIMARY_COLOR)))
 
-    # Debugging: Ensure that the data length matches
-    st.write(f"Time spent years hours: {time_spent_years_hours}")
-    if len(time_spent_years_hours) != len(years):
-        raise ValueError("Mismatch between the number of years and time spent data points.")
-
-    # Add trace to the figure
-    time_spent_fig.add_trace(go.Scatter(
-        x=years,
-        y=time_spent_years_hours,
-        mode='lines+markers',
-        name='Time Spent (hours)',
-        line=dict(color=PRIMARY_COLOR)
-    ))
-
-    # Update the layout of the chart
     time_spent_fig.update_layout(
         title=dict(
             text='Time Spent Over 3 Years with Progressive Automation',
             font=dict(size=16, color=BLACK)
-    ),
+        ),
         xaxis_title='Year',
         yaxis_title='Time Spent (hours)',
         plot_bgcolor=WHITE,
@@ -220,9 +222,7 @@ if submit_button:
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
 
-    # Render the chart in Streamlit
     st.plotly_chart(time_spent_fig, use_container_width=True)
-
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
