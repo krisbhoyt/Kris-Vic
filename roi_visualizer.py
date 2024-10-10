@@ -127,9 +127,15 @@ if submit_button:
         # Ensure valid processors saved calculation
         working_hours_per_year = 2080
         processors_saved = total_hours_saved / working_hours_per_year
+
+        # Calculate the number of AP processors needed for non-automated invoices
+        processors_needed_after_automation = (non_automated_invoice_volume * initial_time_per_invoice / 60) / working_hours_per_year
+    
+        # Calculate the number of processors saved
+        processors_saved = num_ap_processors - processors_needed_after_automation
     
         # Ensure processors saved does not exceed the number of AP processors
-        processors_saved = min(processors_saved, num_ap_processors)
+        processors_saved = max(0,processors_saved)
     
         # Calculate labor cost savings based on time saved
         if processors_saved < 1:
