@@ -186,20 +186,20 @@ if submit_button:
     go.Bar(name='Total Time Saved (hours)', x=['Total Time Saved'], y=[total_time_saved_hours], marker_color=PRIMARY_COLOR)
 ])
 
-time_saved_fig.update_layout(
-    title='Total Time Saved Per Year (hours)',
-    xaxis_title='Savings Type',
-    yaxis_title='Time Saved (hours)',
-    plot_bgcolor=WHITE,
-    paper_bgcolor=WHITE,
-    font=dict(color=BLACK),
-    title_font=dict(size=16, color=BLACK),
-    yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-    xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-    legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+    time_saved_fig.update_layout(
+        title='Total Time Saved Per Year (hours)',
+        xaxis_title='Savings Type',
+        yaxis_title='Time Saved (hours)',
+        plot_bgcolor=WHITE,
+        paper_bgcolor=WHITE,
+        font=dict(color=BLACK),
+        title_font=dict(size=16, color=BLACK),
+        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
 )
 
-st.plotly_chart(time_saved_fig, use_container_width=True)
+    st.plotly_chart(time_saved_fig, use_container_width=True)
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
