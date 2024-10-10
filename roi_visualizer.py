@@ -196,7 +196,7 @@ if submit_button:
         # Calculate invoices per processor after automation
         remaining_processors = num_ap_processors - processors_saved
 
-        if remaining processors < 1:
+        if remaining_processors < 1:
             invoices_per_processor_after = (annual_invoice_volume - automated_invoice_volume) * remaining_processors
         else:
             invoices_per_processor_after = (annual_invoice_volume - automated_invoice_volume) / remaining_processors
