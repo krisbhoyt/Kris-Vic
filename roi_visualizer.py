@@ -224,8 +224,8 @@ if submit_button:
         yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
-
-st.plotly_chart(time_spent_fig, use_container_width=True)
+    )
+    st.plotly_chart(time_spent_fig, use_container_width=True)
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
