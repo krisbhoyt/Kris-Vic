@@ -143,11 +143,9 @@ if submit_button:
         # Ensure processors saved does not exceed the number of AP processors
         processors_saved = max(0,processors_saved)
     
-        # Calculate labor cost savings based on time saved
-        if processors_saved < 1:
-            total_labor_cost_savings = processors_saved / ap_processor_salary
-        else:
-            total_labor_cost_savings = processors_saved * ap_processor_salary
+        # **Calculate labor cost savings based on total hours saved**
+        hourly_rate_per_processor = ap_processor_salary / working_hours_per_year
+        total_labor_cost_savings = total_hours_saved * hourly_rate_per_processor
             
         # Early payer discount savings (realistic cap based on annual)
         early_payer_discount_savings = missed_discounts
