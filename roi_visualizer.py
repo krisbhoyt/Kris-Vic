@@ -180,7 +180,7 @@ if submit_button:
             "Hours Saved": total_hours_saved,
             "Cumulative Savings": cumulative_savings,
             "Cumulative Investment": cumulative_investment,
-            "Automation Rates Over Time": automation_rates
+            "Automation Rates Over Time": automation_rates,
             "Hours per Invoice": per_invoice_processing_time
         }
 
