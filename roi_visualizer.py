@@ -90,9 +90,6 @@ if submit_button:
             total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
             time_spent_years.append(total_time_with_automation)
 
-        # Convert time spent from minutes to hours for visualization
-        time_spent_years_hours = [time / 60 for time in time_spent_years]
-
         # Total Time Spent w/o automation 
         total_time_no_automation = time_per_invoice_before * annual_invoice_volume
                                       
@@ -110,6 +107,33 @@ if submit_button:
             total_labor_cost_savings = processors_saved / ap_processor_salary
         else:
             total_labor_cost_savings = processors_saved * ap_processor_salary
+
+            # Convert time from minutes to hours for the calculations
+        time_per_invoice_before_hours = time_per_invoice_before / 60
+        time_per_invoice_after_hours = time_per_invoice_after / 60
+
+        # Calculate the projected future invoice volume with realistic scaling
+        growth_multiplier = (1 + growth_rate / 100) ** years
+        annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
+
+        # Calculate total time spent before any automation (Year 0)
+        total_time_no_automation = time_per_invoice_before * annual_invoice_volume  # Year 0 (no automation)
+
+        # Initialize list to store time spent each year
+        time_spent_years = [total_time_no_automation]  # Start with no automation
+
+        # Check if automation_rate is valid
+        if not (0 <= automation_rate <= 100):
+        raise ValueError("Automation rate must be between 0 and 100")
+
+        # Simulate progressive automation over the years
+        automation_rates = np.linspace(0, automation_rate / 100, 3)  # Ensure automation_rate is a percentage
+
+        # Convert time spent from minutes to hours for visualization
+        time_spent_years_hours = [time / 60 for time in time_spent_years]
+
+        # Line chart to show time spent each year
+        time_spent_fig = go.Figure()
 
         # Early payer discount savings (realistic cap based on annual)
         early_payer_discount_savings = missed_discounts
@@ -194,39 +218,6 @@ if submit_button:
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
     st.plotly_chart(roi_fig, use_container_width=True)
-
-    # Convert time from minutes to hours for the calculations
-    time_per_invoice_before_hours = time_per_invoice_before / 60
-    time_per_invoice_after_hours = time_per_invoice_after / 60
-
-    # Calculate the projected future invoice volume with realistic scaling
-    growth_multiplier = (1 + growth_rate / 100) ** years
-    annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
-
-    # Calculate total time spent before any automation (Year 0)
-    total_time_no_automation = time_per_invoice_before * annual_invoice_volume  # Year 0 (no automation)
-
-    # Initialize list to store time spent each year
-    time_spent_years = [total_time_no_automation]  # Start with no automation
-
-    # Check if automation_rate is valid
-    if not (0 <= automation_rate <= 100):
-        raise ValueError("Automation rate must be between 0 and 100")
-
-    # Simulate progressive automation over the years
-    automation_rates = np.linspace(0, automation_rate / 100, 3)  # Ensure automation_rate is a percentage
-
-    # Calculate time spent each year as automation increases
-    for rate in automation_rates:
-        non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
-        total_time_with_automation = time_per_invoice_before * non_automated_invoice_volume
-        time_spent_years.append(total_time_with_automation)
-
-    # Convert time spent from minutes to hours for visualization
-    time_spent_years_hours = [time / 60 for time in time_spent_years]
-
-    # Line chart to show time spent each year
-    time_spent_fig = go.Figure()
 
     time_spent_fig.add_trace(go.Scatter(x=['Year 0', 'Year 1', 'Year 2', 'Year 3'],
                                     y=time_spent_years_hours,
