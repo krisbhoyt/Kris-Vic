@@ -64,9 +64,6 @@ automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=
 # Number of years for the projection
 years = st.number_input('Number of Years for Projection', min_value=1, value=3)
 
-# Submit button
-submit_button = st.form_submit_button(label="Calculate ROI")
-
 
 # Function to calculate progressive time savings over years
 def calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years):
