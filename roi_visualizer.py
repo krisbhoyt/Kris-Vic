@@ -119,12 +119,12 @@ if submit_button:
             st.write("Error: Invalid input values, skipping calculation.")
             time_per_invoice_years.append(0)  # Add default value in case of failure
     
-    # Calculate the time per invoice before automation (Year 0)
-    avg_time_before_automation = time_per_invoice_before_hours
-    time_per_invoice_years = [avg_time_before_automation] + time_per_invoice_years  # Include time before automation as Year 0
-
-    # Debug: Print the results to ensure they're populated correctly
-    st.write("Time per Invoice over 3 Years:", time_per_invoice_years)
+        # Calculate the time per invoice before automation (Year 0)
+        avg_time_before_automation = time_per_invoice_before_hours
+        time_per_invoice_years = [avg_time_before_automation] + time_per_invoice_years  # Include time before automation as Year 0
+    
+        # Debug: Print the results to ensure they're populated correctly
+        st.write("Time per Invoice over 3 Years:", time_per_invoice_years)
         # Calculate total time spent on non-automated invoices after automation
         total_time_after_hours = (annual_invoice_volume * (1 - automation_rate / 100)) * time_per_invoice_after_hours
 
