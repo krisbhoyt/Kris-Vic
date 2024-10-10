@@ -97,6 +97,7 @@ if submit_button:
         time_per_invoice_years = calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years)
                                       
         # Calculate total time spent on non-automated invoices after automation
+        total_time_before_hours = annual_invoice_volume * time_per_invoice_before_hours
         total_time_after_hours = (annual_invoice_volume * (1 - automation_rate / 100)) * time_per_invoice_after_hours
 
         # Total time saved is the difference between total time spent before and after automation
