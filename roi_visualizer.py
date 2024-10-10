@@ -84,10 +84,6 @@ if submit_button:
         # Total time saved considering only non-automated invoices
         total_time_saved_hours = time_saved_per_invoice_hours * non_automated_invoice_volume
 
-        # Initialize lists to store time spent each year
-        time_spent_years = [total_time_no_automation]  # Start with no automation
-        automation_rates = np.linspace(0, automation_rate / 100, 3)
-
         # Calculate time spent for each year
         for rate in automation_rates:
             non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
