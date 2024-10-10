@@ -127,10 +127,12 @@ if submit_button:
         # Calculate total hours saved from automation
         automated_invoice_volume = annual_invoice_volume * (automation_rate / 100)
         total_hours_saved_from_automation = automated_invoice_volume * time_saved_per_invoice
-        
+
+        time_per_non_automated_invoice = (initial_time_per_invoice - time_per_invoice_after) / 60
+                                      
         # Calculate the number of processors needed after automation for non-automated invoices
         working_hours_per_year = 2080
-        processors_needed_after_automation = (non_automated_invoice_volume * initial_time_per_invoice / 60) / working_hours_per_year
+        processors_needed_after_automation = (non_automated_invoice_volume * time_per_non_automated_invoice) / working_hours_per_year
         
         # Calculate the number of processors saved based on the remaining manual workload
         processors_saved = num_ap_processors - processors_needed_after_automation
