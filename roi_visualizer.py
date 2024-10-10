@@ -50,7 +50,7 @@ with st.form(key="roi_form"):
     missed_discounts = st.number_input('Missed Early Payer Discounts ($ per year)', min_value=0.00, value=25000.00)
     
     # Time to process one invoice before and after automation (in minutes)
-    initial_time = st.number_input('Initial Time to Process One Invoice (minutes)', min_value=0.0, value=8.0)
+    initial_time_per_invoice = st.number_input('Initial Time to Process One Invoice (minutes)', min_value=0.0, value=8.0)
     time_per_invoice_after = st.number_input('Time to Process One Invoice After Automation (minutes)', min_value=0.0, value=1.5)
     
     # Automation rate
@@ -63,7 +63,7 @@ with st.form(key="roi_form"):
 
 if submit_button:
     # Function to calculate progressive time savings over years
-    def calculate_time_per_invoice_over_years(initial_time, automation_rate, years):
+    def calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years):
         time_per_invoice_years = []
         automation_rates = []
         
@@ -73,7 +73,7 @@ if submit_button:
             current_automation_rate = 1 - (1 - automation_rate / 100) ** (year / years)
             
             # Calculate the time saved for the current year
-            time_per_invoice = initial_time * (1 - current_automation_rate)
+            time_per_invoice = initial_time_per_invoice * (1 - current_automation_rate)
             
             # Append the time per invoice for the current year
             time_per_invoice_years.append(time_per_invoice)
