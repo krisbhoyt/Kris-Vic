@@ -124,6 +124,9 @@ if submit_button:
         cumulative_investment = [automation_system_cost * (year + 1) for year in range(years)]
         roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 for year in range(years)]
 
+        # Calculate net savings (difference between savings and investment)
+        net_savings = [cumulative_savings[year] - cumulative_investment[year] for year in range(years)]
+
         # Time Efficiency Gains
         time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
         total_time_saved = time_saved_per_invoice * non_automated_invoice_volume
@@ -155,8 +158,8 @@ if submit_button:
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
     col1, col2, col3 = st.columns(3)
-    col1.metric(label="Time Efficiency Gains", value=f"{int(results['Time Efficiency Gain']):,}")
-    col2.metric(label="Processor Productivity Gains", value=f"{int(results['Processor Productivity Gains']):.2f}")
+    col1.metric(label="Time Efficiency Gains (hours)", value=f"{int(results['Time Efficiency Gain']):,}")
+    col2.metric(label="Invoices Per Processor", value=f"{int(results['Processor Productivity Gains']):.2f}")
 
     # Display key metrics in a 3x2 grid for clarity
     st.markdown("### Key Metrics")
@@ -209,7 +212,7 @@ if submit_button:
 
     time_spent_fig.update_layout(
         title=dict(
-            text='Time Spent Over 3 Years with Progressive Automation',
+            text='Hours Spent Over 3 Years with Progressive Automation',
             font=dict(size=16, color=BLACK)
         ),
         xaxis_title='Year',
@@ -223,6 +226,29 @@ if submit_button:
     )
 
     st.plotly_chart(time_spent_fig, use_container_width=True)
+
+    # Chart 4: Net Savings Over 3 Years
+    net_savings_fig = go.Figure()
+
+    # Plot net savings over the 3 years
+    net_savings_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=net_savings,
+                                     mode='lines+markers', name='Net Savings', marker_color=PRIMARY_COLOR))
+
+    net_savings_fig.update_layout(
+        title='Net Savings vs. Investment Over 3 Years',
+        xaxis_title='Year',
+        yaxis_title='Net Savings ($)',
+        plot_bgcolor=WHITE,
+        paper_bgcolor=WHITE,
+        font=dict(color=BLACK),
+        title_font=dict(size=16, color=BLACK),
+        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+    )
+
+    # Render the net savings chart in Streamlit
+    st.plotly_chart(net_savings_fig, use_container_width=True)
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
