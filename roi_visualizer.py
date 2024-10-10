@@ -85,6 +85,11 @@ if submit_button:
         # Initialize list to store time spent each year
         time_spent_years = []
 
+     # Debug: Print input variables to ensure they are correct
+        st.write("Automation Rates:", automation_rates)
+        st.write("Annual Invoice Volume:", annual_invoice_volume)
+        st.write("Time Per Invoice (Before/After in hours):", time_per_invoice_before_hours, time_per_invoice_after_hours)
+                                      
         # Loop through the automation rates for each year and calculate time spent
         for rate in automation_rates:
             # Start with maximum manual processing and reduce as automation progresses
