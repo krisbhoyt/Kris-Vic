@@ -201,11 +201,17 @@ if submit_button:
     )
     st.plotly_chart(roi_fig, use_container_width=True)
 
-   # Initialize the Plotly figure
+    # Initialize the Plotly figure
     time_spent_fig = go.Figure()
 
     # Ensure the number of years matches the data
     years = ['Year 0', 'Year 1', 'Year 2', 'Year 3']
+
+    # Calculate time spent years hours
+    time_spent_years_hours = [time / 60 for time in time_spent_years]
+
+    # Debugging: Ensure that the data length matches
+    st.write(f"Time spent years hours: {time_spent_years_hours}")
     if len(time_spent_years_hours) != len(years):
         raise ValueError("Mismatch between the number of years and time spent data points.")
 
@@ -224,18 +230,19 @@ if submit_button:
             text='Time Spent Over 3 Years with Progressive Automation',
             font=dict(size=16, color=BLACK)
     ),
-    xaxis_title='Year',
-    yaxis_title='Time Spent (hours)',
-    plot_bgcolor=WHITE,
-    paper_bgcolor=WHITE,
-    font=dict(color=BLACK),
-    yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-    xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-    legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+        xaxis_title='Year',
+        yaxis_title='Time Spent (hours)',
+        plot_bgcolor=WHITE,
+        paper_bgcolor=WHITE,
+        font=dict(color=BLACK),
+        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
 
     # Render the chart in Streamlit
     st.plotly_chart(time_spent_fig, use_container_width=True)
+
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
