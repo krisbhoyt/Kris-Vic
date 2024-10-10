@@ -211,7 +211,6 @@ if submit_button:
     st.markdown("### Time Savings Over 3 Years")
 
     # Current time spent without automation
-    annual_invoice_volume = current_invoice_volume * 12
     total_time_no_automation = time_per_invoice_before * annual_invoice_volume  # Year 0 (no automation)
 
     # Time saved per invoice after full automation
