@@ -54,14 +54,17 @@ with st.form(key="roi_form"):
     time_per_invoice_after = st.number_input('Time to Process One Invoice After Automation (minutes)', min_value=0.0, value=1.5)
     
     # Automation rate
-    automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=100, value=0)
+    automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=100, value=70)
 
     automation_system_cost = st.number_input('AP Automation System Cost ($ per year)', min_value=0.0, value=120000.0)
-    years = st.number_input('Number of Years for Projection', min_value=1, value=3)
+    years = st.number_input('Number of Years for Projection', min_value=1, value=3, step=1)
 
     submit_button = st.form_submit_button(label="Calculate ROI")
 
 if submit_button:
+    # Debug: Check the value of years
+    st.write(f"Number of years: {years}")
+
     # Function to calculate ROI with realistic scaling
     def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
                                   missed_discounts, time_per_invoice_before, time_per_invoice_after, 
@@ -122,17 +125,15 @@ if submit_button:
         # Cumulative savings and investment over the years
         cumulative_savings = [total_savings * (year + 1) for year in range(years)]
         cumulative_investment = [automation_system_cost * (year + 1) for year in range(years)]
-        roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 for year in range(years)]
-
-        # Calculate net savings (difference between savings and investment)
+        
+        # Calculate net savings (savings - investment)
         net_savings = [cumulative_savings[year] - cumulative_investment[year] for year in range(years)]
 
-        # Define the number of years as an integer
-        years = st.number_input('Number of Years for Projection', min_value=1, value=3)
+        # Calculate ROI (%) for each year based on the cumulative savings and cumulative investment
+        roi_over_time = [(cumulative_savings[year] / cumulative_investment[year]) * 100 if cumulative_investment[year] != 0 else 0 for year in range(years)]
 
-        # Ensure that net_savings has the correct number of values
-        if len(net_savings) != years:
-            raise ValueError("Mismatch between the number of years and net savings data points.")
+        # Ensure the ROI for the final year is added to the results
+        roi_final = roi_over_time[-1]
 
         # Time Efficiency Gains
         time_saved_per_invoice = time_per_invoice_before - time_per_invoice_after
@@ -147,15 +148,13 @@ if submit_button:
             "Labor Cost Savings ($)": total_labor_cost_savings,
             "Early Payer Discount Savings ($)": early_payer_discount_savings,
             "Total Savings ($)": total_savings,
-            "ROI (%)": roi_over_time[-1],
+            "Net Savings": net_savings,
             "Processors Saved": processors_saved,
-            "Cumulative Savings": cumulative_savings,
-            "Cumulative Investment": cumulative_investment,
-            "ROI Over Time": roi_over_time,
             "Time Efficiency Gain": total_time_saved,
             "Processor Productivity Gains": invoices_per_processor_after,
             "Time Spent Over 3 Years (hours)": time_spent_years_hours,
-            "Net Savings ($)": net_savings,
+            "ROI (%)": roi_final,  # Add the final ROI to the results
+            "ROI Over Time": roi_over_time  # ROI over each year
         }
 
     # Calculate ROI with growth projection
@@ -166,8 +165,8 @@ if submit_button:
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
     col1, col2, col3 = st.columns(3)
-    col1.metric(label="Time Efficiency Gains (hours)", value=f"{int(results['Time Efficiency Gain']):,}")
-    col2.metric(label="Invoices Per Processor", value=f"{int(results['Processor Productivity Gains']):.2f}")
+    col1.metric(label="Time Efficiency Gains", value=f"{int(results['Time Efficiency Gain']):,}")
+    col2.metric(label="Processor Productivity Gains", value=f"{int(results['Processor Productivity Gains']):.2f}")
 
     # Display key metrics in a 3x2 grid for clarity
     st.markdown("### Key Metrics")
@@ -182,24 +181,22 @@ if submit_button:
     # Generate charts, each on its own line for better visibility
     st.markdown("### Visualization of Savings")
 
-    # Chart 4: ROI Over 3 Years
-    roi_fig = go.Figure()
+    # Chart 1: Net Savings Over 3 Years
+    net_savings_fig = go.Figure()
 
-    # Plot cumulative savings
-    roi_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=results['Cumulative Savings'],
-                                 mode='lines+markers', name='Savings', marker_color=PRIMARY_COLOR))
+    # Plot net savings over the specified years
+    net_savings_fig.add_trace(go.Scatter(
+        x=list(range(1, years + 1)),  # List of years [1, 2, 3, ..., years]
+        y=results['Net Savings'],     # Corresponding net savings values
+        mode='lines+markers',
+        name='Net Savings',
+        marker_color=PRIMARY_COLOR
+    ))
 
-    # Plot cumulative investment
-    roi_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=results['Cumulative Investment'],
-                                 mode='lines+markers', name='Investment', marker_color='red'))
-
-    roi_fig.update_layout(
-        title=dict(
-            text='Cumulative Savings vs. Investment Over 3 Years',
-            font=dict(size=16, color=BLACK)
-        ),
+    net_savings_fig.update_layout(
+        title='Net Savings vs. Investment Over 3 Years',
         xaxis_title='Year',
-        yaxis_title='Amount ($)',
+        yaxis_title='Net Savings ($)',
         plot_bgcolor=WHITE,
         paper_bgcolor=WHITE,
         font=dict(color=BLACK),
@@ -208,24 +205,23 @@ if submit_button:
         xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
-    st.plotly_chart(roi_fig, use_container_width=True)
 
-    # Time Savings Visualization
+    st.plotly_chart(net_savings_fig, use_container_width=True)
+
+    # Chart 2: Time Spent Over 3 Years
     time_spent_fig = go.Figure()
-    years = ['Year 0', 'Year 1', 'Year 2', 'Year 3']
 
-    # Add trace for time spent per year
-    time_spent_fig.add_trace(go.Scatter(x=years,
-                                        y=results['Time Spent Over 3 Years (hours)'],
-                                        mode='lines+markers',
-                                        name='Time Spent (hours)',
-                                        line=dict(color=PRIMARY_COLOR)))
+    time_spent_fig.add_trace(go.Scatter(x=['Year 0', 'Year 1', 'Year 2', 'Year 3'],
+                                    y=results['Time Spent Over 3 Years (hours)'],
+                                    mode='lines+markers',
+                                    name='Time Spent (hours)',
+                                    line=dict(color=PRIMARY_COLOR)))
 
     time_spent_fig.update_layout(
         title=dict(
-            text='Hours Spent Over 3 Years with Progressive Automation',
-            font=dict(size=16, color=BLACK)
-        ),
+        text='Time Spent Over 3 Years with Progressive Automation',
+        font=dict(size=16, color=BLACK)
+    ),
         xaxis_title='Year',
         yaxis_title='Time Spent (hours)',
         plot_bgcolor=WHITE,
@@ -238,20 +234,16 @@ if submit_button:
 
     st.plotly_chart(time_spent_fig, use_container_width=True)
 
-    # Chart 4: Net Savings Over 3 Years
-    net_savings_fig = go.Figure()
+    # Chart 3: ROI Over Time
+    roi_fig = go.Figure()
 
-    # Plot net savings over the 3 years
-    net_savings_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=net_savings,
-                                     mode='lines+markers', name='Net Savings', marker_color=PRIMARY_COLOR))
+    roi_fig.add_trace(go.Scatter(x=list(range(1, years + 1)), y=results['ROI Over Time'],
+                                 mode='lines+markers', name='ROI (%)', marker_color=PRIMARY_COLOR))
 
-    net_savings_fig.update_layout(
-        title=dict(
-            text='Net Savings vs. Investment Over 3 Years',
-            font=dict(size=16, color=BLACK)
-        ),
+    roi_fig.update_layout(
+        title='ROI Over 3 Years',
         xaxis_title='Year',
-        yaxis_title='Net Savings ($)',
+        yaxis_title='ROI (%)',
         plot_bgcolor=WHITE,
         paper_bgcolor=WHITE,
         font=dict(color=BLACK),
@@ -261,8 +253,7 @@ if submit_button:
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
     )
 
-    # Render the net savings chart in Streamlit
-    st.plotly_chart(net_savings_fig, use_container_width=True)
+    st.plotly_chart(roi_fig, use_container_width=True)
 
     # Explanation of calculations
     st.markdown("### Explanation of Calculations")
