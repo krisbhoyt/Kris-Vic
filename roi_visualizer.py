@@ -253,8 +253,7 @@ st.markdown("---")
 st.markdown("### Efficiency Gains")
 col1, col2, col3 = st.columns(3)
 col1.metric(label="Hours Saved", value=f"{int(results['Hours Saved']):,}")
-col2.metric(label="Invoices Requiring Review", value=f"{int(results['Processor Productivity Gains']):.2f}")
-col3.metric(label="Automated Invoices", value=f"{int(results['Automated Invoice Volume']):.2f}")
+col2.metric(label="Automated Invoices", value=f"{int(results['Automated Invoice Volume']):.2f}")
 
 
 # Add another horizontal line
