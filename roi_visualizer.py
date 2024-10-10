@@ -74,59 +74,28 @@ if submit_button:
         time_per_invoice_before_hours = time_per_invoice_before / 60
         time_per_invoice_after_hours = time_per_invoice_after / 60
 
-        # Define an inverted exponential curve for progressive automation
-        def exponential_progression_inverted(target_rate, years, lambd=0.7, min_rate=0.001):
-            # Invert the exponential progression so that it starts at 0 and approaches the target rate
-            return [target_rate * (1 - np.exp(-lambd * t)) for t in range(0, years + 1)]
+        # Simplified inputs for calculating time savings over years
+        initial_time_per_invoice = st.number_input('Initial Time to Process One Invoice (minutes)', min_value=0.0, value=8.0)
+        automation_rate = st.number_input('Target Automation Rate (%)', min_value=0.0, max_value=100.0, value=70.0)
+        years = st.number_input('Number of Years for Projection', min_value=1, value=3)
 
-        # Use inverted exponential progression to calculate the automation rate over the years
-        automation_rates = exponential_progression_inverted(automation_rate / 100, years, min_rate=0.001)
-
-        # Initialize list to store time spent each year
-        time_spent_years = []
-
-        # Debug: Print input variables to ensure they are correct
-        st.write("Automation Rates:", automation_rates)
-        st.write("Annual Invoice Volume:", annual_invoice_volume)
-        st.write("Time Per Invoice (Before/After in hours):", time_per_invoice_before_hours, time_per_invoice_after_hours)
-
-        # Calculate the time per invoice before automation (Year 0)
-        avg_time_before_automation = time_per_invoice_before_hours
-
-        # Start by adding Year 0 before any automation
-        time_per_invoice_years.append(avg_time_before_automation)
-                                      
-        # Loop through the automation rates for each year and calculate processing time per invoice
-        for rate in automation_rates:
-            non_automated_invoice_volume = annual_invoice_volume * (1 - rate)
+        # Function to calculate time saved each year with a linear progression of automation
+        def calculate_time_per_invoice_over_years(initial_time, automation_rate, years):
+            time_per_invoice_years = []
+            automation_rates = []
         
-            # Debug: Print rate and non-automated invoice volume
-            st.write(f"Year Rate: {rate}, Non-Automated Invoice Volume: {non_automated_invoice_volume}")
+            # Calculate time reduction each year assuming linear automation increase
+            for year in range(0, years + 1):
+                    # Linear progression of automation from 0% to target rate over the years
+                    current_automation_rate = (year / years) * automation_rate / 100
+                    time_per_invoice = initial_time * (1 - current_automation_rate)  # Time saved based on automation rate
+                    time_per_invoice_years.append(time_per_invoice)
+        
+            return time_per_invoice_years
 
-            # Ensure we have a valid annual invoice volume to avoid division by zero
-            if annual_invoice_volume > 0 and time_per_invoice_before_hours > 0 and time_per_invoice_after_hours >= 0:
-                # Calculate the average time per invoice
-                try:
-                    avg_time_per_invoice_year = ((non_automated_invoice_volume * time_per_invoice_after_hours) + 
-                                                 (annual_invoice_volume * rate * time_per_invoice_before_hours)) / annual_invoice_volume
-    
-                    # Ensure the result is a valid number (i.e., not infinity or NaN)
-                    if np.isfinite(avg_time_per_invoice_year):
-                        time_per_invoice_years.append(avg_time_per_invoice_year)
-                        st.write(f"Avg Time Per Invoice for Year: {avg_time_per_invoice_year}")
-                    else:
-                        st.write("Error: avg_time_per_invoice_year is not a finite number.")
-                        time_per_invoice_years.append(0.001)  # Add default value if something goes wrong
-    
-                except Exception as e:
-                    st.write(f"Error in calculating avg_time_per_invoice_year: {e}")
-                    time_per_invoice_years.append(0.001)  # Add default value in case of failure
-            else:
-                st.write("Error: Invalid input values, skipping calculation.")
-                time_per_invoice_years.append(0.001)  # Add default value in case of failure
-    
-        # Debug: Print the results to ensure they're populated correctly
-        st.write("Time per Invoice over 3 Years:", time_per_invoice_years)
+        # Calculate time per invoice for each year
+        time_per_invoice_years = calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years)
+                                      
         # Calculate total time spent on non-automated invoices after automation
         total_time_after_hours = (annual_invoice_volume * (1 - automation_rate / 100)) * time_per_invoice_after_hours
 
@@ -209,13 +178,15 @@ if submit_button:
             "Cumulative Savings": cumulative_savings,
             "Cumulative Investment": cumulative_investment,
             "Automation Rates Over Time": automation_rates,
-            "Processing Time Per Invoice (hours)": time_per_invoice_years
+            "Processing Time Per Invoice (hours)": time_per_invoice_years,
+            "Time Per Invoice Over Years": time_per_invoice_years,
+            "Automation Rate Over Years": automation_rates
         }
 
     # Calculate ROI with growth projection
     results = calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
-                                        missed_discounts, time_per_invoice_before, time_per_invoice_after, 
-                                        automation_system_cost, automation_rate)
+                                          missed_discounts, time_per_invoice_before, time_per_invoice_after, 
+                                          automation_system_cost, automation_rate):
 
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
@@ -261,39 +232,20 @@ if submit_button:
     )
     st.plotly_chart(roi_fig, use_container_width=True)
 
-    # Chart: Time Spent Over 3 Years with Exponential Automation
-    time_spent_fig = go.Figure()
-
-    # Years for the x-axis (including Year 0)
-    years_list = ['Year 0'] + [f'Year {i}' for i in range(1, years + 1)]
-
-    # Time spent over 3 years should now correctly incorporate the exponential progression of automation
-    time_spent_fig.add_trace(go.Scatter(
-        x=years_list,
-        y=results['Processing Time Per Invoice (hours)'],  # Data reflects exponential progression of automation
-        mode='lines+markers', 
-        name='Time Spent (hours)',
-        line=dict(color=PRIMARY_COLOR)
-    ))
-
-    # Update layout for the chart
-    time_spent_fig.update_layout(
-        title=dict(
-            text='Invoice Processing Time',
-            font=dict(size=16, color=BLACK)
-        ),
-        xaxis_title='Year',
-        yaxis_title='Time Spent (hours)',
-        plot_bgcolor=WHITE,
-        paper_bgcolor=WHITE,
-        font=dict(color=BLACK),
-        yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
-        legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
-    )
-
-    # Display the chart in Streamlit
-    st.plotly_chart(time_spent_fig, use_container_width=True)
+   # Create a line plot for time savings over years
+    fig.add_trace(go.Scatter(x=list(range(0, years + 1)), y=time_per_invoice_years,
+                         mode='lines+markers',
+                         name='Time Per Invoice (minutes)',
+                         line=dict(color='#2E3B63')))
+    fig.update_layout(title='Time to Process Invoice Over Years with Progressive Automation',
+                      xaxis_title='Year',
+                      yaxis_title='Time Per Invoice (minutes)',
+                      plot_bgcolor='white',
+                      font=dict(color='black'))
+                    yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+                    xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
+                    legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
+    st.plotly_chart(fig, use_container_width=True)
 
     # Chart 3: Net Savings Over 3 Years
     net_savings_fig = go.Figure()
