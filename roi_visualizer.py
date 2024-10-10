@@ -149,7 +149,6 @@ if submit_button:
             "Processor Productivity Gains": invoices_per_processor_after,
             "Time Spent Over 3 Years (hours)": time_spent_years_hours,
             "Net Savings ($)": net_savings,
-            "Years": Years
         }
 
     # Calculate ROI with growth projection
@@ -188,7 +187,10 @@ if submit_button:
                                  mode='lines+markers', name='Investment', marker_color='red'))
 
     roi_fig.update_layout(
-        title='Cumulative Savings vs. Investment Over 3 Years',
+        title=dict(
+            text='Cumulative Savings vs. Investment Over 3 Years',
+            font=dict(size=16, color=BLACK)
+        ).
         xaxis_title='Year',
         yaxis_title='Amount ($)',
         plot_bgcolor=WHITE,
@@ -237,7 +239,10 @@ if submit_button:
                                      mode='lines+markers', name='Net Savings', marker_color=PRIMARY_COLOR))
 
     net_savings_fig.update_layout(
-        title='Net Savings vs. Investment Over 3 Years',
+        title=dict(
+            text='Net Savings vs. Investment Over 3 Years',
+            font=dict(size=16, color=BLACK)
+        ).
         xaxis_title='Year',
         yaxis_title='Net Savings ($)',
         plot_bgcolor=WHITE,
