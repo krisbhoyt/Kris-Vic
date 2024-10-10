@@ -182,7 +182,7 @@ if submit_button:
 
         year_one_costs = automation_system_cost + ap_implementation_fee + payments_implementation_fee
         total_implementation_cost = ap_implementation_fee + payments_implementation_fee
-        annual_recurring_cost = year_one_costs
+        annual_recurring_cost = automation_system_cost
                                       
         # Return results
         return {
