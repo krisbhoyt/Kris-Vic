@@ -78,24 +78,18 @@ if submit_button:
         growth_multiplier = (1 + growth_rate / 100) ** years
         annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
 
-        # Adjust time saved to account for automation rate
-        non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
-
-        # Total time saved considering only non-automated invoices
-        total_time_saved_hours = time_saved_per_invoice_hours * non_automated_invoice_volume
-
-        # Total Time Spent w/o automation 
+        # Total Time Spent without automation (Year 0)
         total_time_no_automation = time_per_invoice_before * annual_invoice_volume
 
-        # Initialize list to store time spent each year
-        time_spent_years = [total_time_no_automation]  # Start with no automation
+        # Initialize list to store time spent each year (start with no automation)
+        time_spent_years = [total_time_no_automation]
 
         # Check if automation_rate is valid
         if not (0 <= automation_rate <= 100):
             raise ValueError("Automation rate must be between 0 and 100")
 
-        # Simulate progressive automation over the years
-        automation_rates = np.linspace(0, automation_rate / 100, 3)  # Ensure automation_rate is a percentage
+        # Simulate progressive automation over the years (e.g., increasing automation from 0% to specified rate)
+        automation_rates = np.linspace(0, automation_rate / 100, 3)
 
         # Calculate time spent for each year as automation increases
         for rate in automation_rates:
@@ -110,6 +104,7 @@ if submit_button:
         working_hours_per_year = 2080
 
         # Calculate processors saved based on total time saved
+        total_time_saved_hours = time_saved_per_invoice_hours * non_automated_invoice_volume
         processors_saved = total_time_saved_hours / working_hours_per_year
 
         # Ensure processors saved does not exceed the number of AP processors
@@ -137,21 +132,6 @@ if submit_button:
         invoices_per_processor_before = current_invoice_volume / num_ap_processors
         invoices_per_processor_after = current_invoice_volume / (num_ap_processors - processors_saved)
                                       
-        return {
-            "Projected Invoice Volume": annual_invoice_volume,
-            "Labor Cost Savings ($)": total_labor_cost_savings,
-            "Early Payer Discount Savings ($)": early_payer_discount_savings,
-            "Total Savings ($)": total_savings,
-            "ROI (%)": roi_over_time[-1],
-            "Processors Saved": processors_saved,
-            "Cumulative Savings": cumulative_savings,
-            "Cumulative Investment": cumulative_investment,
-            "ROI Over Time": roi_over_time,
-            "Time Efficiency Gain": total_time_saved,
-            "Processor Productivity Gains": invoices_per_processor_after,
-            "Time Spent Over 3 Years (hours)": time_spent_years_hours
-        }
-
     # Calculate ROI with growth projection
     results = calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
                                         missed_discounts, time_per_invoice_before, time_per_invoice_after, 
