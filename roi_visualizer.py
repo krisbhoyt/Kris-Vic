@@ -193,7 +193,7 @@ time_saved_fig.update_layout(
     plot_bgcolor=WHITE,
     paper_bgcolor=WHITE,
     font=dict(color=BLACK),
-    title_font=dict(size=16, color=BLACK)
+    title_font=dict(size=16, color=BLACK),
     yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
     xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
     legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
