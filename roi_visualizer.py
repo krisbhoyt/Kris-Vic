@@ -79,10 +79,10 @@ if submit_button:
         automation_rate = st.number_input('Target Automation Rate (%)', min_value=0.0, max_value=100.0, value=70.0)
         years = st.number_input('Number of Years for Projection', min_value=1, value=3)
 
-        # Function to calculate time saved each year with a linear progression of automation
-        def calculate_time_per_invoice_over_years(initial_time, automation_rate, years):
-            time_per_invoice_years = []
-            automation_rates = []
+    # Function to calculate time saved each year with a linear progression of automation
+    def calculate_time_per_invoice_over_years(initial_time, automation_rate, years):
+                                            time_per_invoice_years = []
+                                            automation_rates = []
         
             # Calculate time reduction each year assuming linear automation increase
             for year in range(0, years + 1):
