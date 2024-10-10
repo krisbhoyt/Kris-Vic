@@ -238,9 +238,9 @@ if submit_button:
     #Display Costs
     st.markdown("### Costs to Customer")
     col1, col2, col3 = st.columns(3)
-    col1.metric(label="Year 1 Costs", value=f"{int(results['Year One Costs']):,}")
-    col2.metric(label="Implementation Cost", value=f"{int(results['Total Implementation Cost']):,}")
-    col3.metric(label="Annual Recurring Cost", value=f"{int(results['Annual Recurring Cost']):,}")
+    col1.metric(label="Year 1 Costs", value=f"${int(results['Year One Costs']):,}")
+    col2.metric(label="Implementation Cost", value=f"${int(results['Total Implementation Cost']):,}")
+    col3.metric(label="Annual Recurring Cost", value=f"${int(results['Annual Recurring Cost']):,}")
 
     # Add another horizontal line
     st.markdown("---")      
