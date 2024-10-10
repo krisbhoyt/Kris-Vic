@@ -113,10 +113,14 @@ if submit_button:
 
         # Calculate total hours saved correctly
         total_hours_saved = total_time_saved_hours    
+
+        # Total time saved for non-automated invoices
+        non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
+        total_time_saved_non_automated = non_automated_invoice_volume * (initial_time_per_invoice / 60 - time_per_invoice_after / 60)
                                       
         # Ensure valid processors saved calculation
         working_hours_per_year = 2080
-        processors_saved = total_time_saved_hours / working_hours_per_year
+        processors_saved = total_time_saved_non_automated / working_hours_per_year
     
         # Ensure processors saved does not exceed the number of AP processors
         processors_saved = min(processors_saved, num_ap_processors)
