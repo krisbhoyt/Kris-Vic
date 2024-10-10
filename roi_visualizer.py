@@ -109,18 +109,18 @@ if submit_button:
             total_time_saved_years.append(total_time_per_year)
     
         # Total time saved is the difference between year 0 (no automation) and year N (full automation)
-        total_time_saved_hours = total_time_saved_years[0] - total_time_saved_years[-1]
-
-        # Calculate total hours saved correctly
-        total_hours_saved = total_time_saved_hours    
+        total_time_saved_hours = total_time_saved_years[0] - total_time_saved_years[-1]   
 
         # Total time saved for non-automated invoices
         non_automated_invoice_volume = annual_invoice_volume * (1 - automation_rate / 100)
         total_time_saved_non_automated = non_automated_invoice_volume * (initial_time_per_invoice / 60 - time_per_invoice_after / 60)
+
+        # Calculate total hours saved correctly
+        total_hours_saved = total_time_saved_non_automated 
                                       
         # Ensure valid processors saved calculation
         working_hours_per_year = 2080
-        processors_saved = total_time_saved_non_automated / working_hours_per_year
+        processors_saved = total_hours_saved - (working_hours_per_year * years)
     
         # Ensure processors saved does not exceed the number of AP processors
         processors_saved = min(processors_saved, num_ap_processors)
@@ -150,7 +150,7 @@ if submit_button:
             "Labor Cost Savings ($)": total_labor_cost_savings,
             "Early Payer Discount Savings ($)": early_payer_discount_savings,
             "Total Savings ($)": total_savings,
-            "Net Savings": net_savings,
+            "Net Savings": net_savings[-1],
             "Processors Saved": processors_saved,
             "Time Efficiency Gain": total_time_saved_hours,
             "Processor Productivity Gains": invoices_per_processor_after,
