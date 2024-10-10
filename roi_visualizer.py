@@ -97,7 +97,10 @@ if submit_button:
     
         # Total time saved is the difference between year 0 (no automation) and year N (full automation)
         total_time_saved_hours = total_time_saved_years[0] - total_time_saved_years[-1]
-    
+
+        # Calculate total hours saved correctly
+        total_hours_saved = total_time_saved_hours    
+                                      
         # Ensure valid processors saved calculation
         working_hours_per_year = 2080
         processors_saved = total_time_saved_hours / working_hours_per_year
