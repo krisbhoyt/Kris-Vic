@@ -70,28 +70,25 @@ if submit_button:
         # Loop through the years to simulate progressive automation
         for year in range(0, years + 1):
             # Calculate the automation rate for the current year (using exponential progression)
-            current_automation_rate = 1 - (1 - automation_rate / 100) ** (year / years)
+            if year == 0:
+                current_automation_rate = 0  # Start with no automation in Year 0
+            else:
+                current_automation_rate = 1 - (1 - automation_rate / 100) ** (year / years)
             
-            # Calculate the time saved for the current year
+            # Ensure we are calculating valid numbers for time per invoice
             time_per_invoice = initial_time_per_invoice * (1 - current_automation_rate)
             
-            # Append the time per invoice for the current year
+            # Append the time per invoice for the current year to the list
             time_per_invoice_years.append(time_per_invoice)
             
             # Store the automation rate for the current year (as a percentage)
             automation_rates.append(current_automation_rate * 100)
-        
+    
+        # Return both the time per invoice and automation rates over the years
         return time_per_invoice_years, automation_rates
     
     # Call the function
     time_per_invoice_years, automation_rates = calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years)
-
-    # Proceed with further calculations or plotting
-    if time_per_invoice_years:
-        # Continue with plotting or displaying data
-        pass
-    else:
-        st.write("Error: No data generated for time per invoice.")
     
     # Function to calculate ROI, time saved, processors saved, and net savings
     def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
