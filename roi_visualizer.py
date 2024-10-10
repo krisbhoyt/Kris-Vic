@@ -172,7 +172,6 @@ if submit_button:
             "Processors Saved": processors_saved,
             "Time Efficiency Gain": total_time_saved,
             "Processor Productivity Gains": invoices_per_processor_after,
-            "Time Spent Over 3 Years (hours)": time_spent_years,
             "ROI (%)": roi_final,
             "ROI Over Time": roi_over_time,
             "Hours Saved": total_hours_saved,
@@ -184,12 +183,9 @@ if submit_button:
         }
 
     # Calculate ROI with growth projection
-    results = calculate_roi_with_growth(
-        current_invoice_volume, growth_rate, years,
-        ap_processor_salary, num_ap_processors, 
-        missed_discounts, time_per_invoice_before, 
-        time_per_invoice_after,
-        automation_system_cost, automation_rate)
+    results = calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
+                                  missed_discounts, time_per_invoice_before, time_per_invoice_after, 
+                                  automation_system_cost, automation_rate)
 
     # Display Efficiency Metrics
     st.markdown("### Efficiency Gains")
