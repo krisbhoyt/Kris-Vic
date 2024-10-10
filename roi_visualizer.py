@@ -114,14 +114,14 @@ if submit_button:
                     st.write(f"Avg Time Per Invoice for Year: {avg_time_per_invoice_year}")
                 else:
                     st.write("Error: avg_time_per_invoice_year is not a finite number.")
-                    time_per_invoice_years.append(0)  # Add default value if something goes wrong
+                    time_per_invoice_years.append(0.001)  # Add default value if something goes wrong
 
             except Exception as e:
                 st.write(f"Error in calculating avg_time_per_invoice_year: {e}")
-                time_per_invoice_years.append(0)  # Add default value in case of failure
+                time_per_invoice_years.append(0.001)  # Add default value in case of failure
         else:
             st.write("Error: Invalid input values, skipping calculation.")
-            time_per_invoice_years.append(0)  # Add default value in case of failure
+            time_per_invoice_years.append(0.001)  # Add default value in case of failure
     
         # Debug: Print the results to ensure they're populated correctly
         st.write("Time per Invoice over 3 Years:", time_per_invoice_years)
