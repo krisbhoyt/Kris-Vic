@@ -150,7 +150,7 @@ if submit_button:
             "Labor Cost Savings ($)": total_labor_cost_savings,
             "Early Payer Discount Savings ($)": early_payer_discount_savings,
             "Total Savings ($)": total_savings,
-            "Net Savings": net_savings[-1],
+            "Net Savings": net_savings,
             "Processors Saved": processors_saved,
             "Time Efficiency Gain": total_time_saved_hours,
             "Processor Productivity Gains": invoices_per_processor_after,
