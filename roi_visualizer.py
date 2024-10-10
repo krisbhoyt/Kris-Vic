@@ -56,7 +56,9 @@ with st.form(key="roi_form"):
     # Automation rate
     automation_rate = st.number_input('Automation Rate (%)', min_value=0, max_value=100, value=70)
 
-    automation_system_cost = st.number_input('AP Automation System Cost ($ per year)', min_value=0.0, value=120000.0)
+    automation_system_cost = st.number_input('AP Automation System Cost ($ per year)', min_value=0.00, value=120000.00)
+    ap_implementation_fee = st.number_input('Implementation Fee'), min_value=0.00, value=25,000.00)
+    payments_implementation_fee = st.numberinput('Payments Implementation Fee'), min_value=0.00, value=0.00)
     years = st.number_input('Number of Years for Projection', min_value=1, value=3)
 
     submit_button = st.form_submit_button(label="Calculate ROI")
@@ -149,8 +151,15 @@ if submit_button:
         # Total savings (labor cost + early payer discounts)
         total_savings = total_labor_cost_savings + early_payer_discount_savings
 
-        # Investment in AP automation system
-        total_investment = automation_system_cost * years
+        # Investment in AP automation system (implementation fees only in Year 0)
+            total_investment = []
+            for year in range(years):
+                if year == 0:
+                    # Year 0 includes implementation fees
+                    total_investment.append(automation_system_cost + ap_implementation_fee + payments_implementation_fee)
+                else:
+                    # Subsequent years only include the recurring system cost
+                    total_investment.append(automation_system_cost)
                                       
         # Cumulative savings and investment over the years
         cumulative_savings = [total_savings * (year + 1) for year in range(years)]
