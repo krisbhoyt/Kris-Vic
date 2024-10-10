@@ -137,6 +137,9 @@ if submit_button:
         
         # Ensure processors_saved is a positive number and does not exceed the original number of AP processors
         processors_saved = max(0, min(processors_saved, num_ap_processors))
+
+        # Calculate total hours saved from automation
+        total_hours_saved = automated_invoice_volume * time_saved_per_invoice
     
         # **Calculate labor cost savings based on total hours saved**
         hourly_rate_per_processor = ap_processor_salary / working_hours_per_year
