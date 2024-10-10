@@ -141,7 +141,7 @@ if submit_button:
         processors_saved = num_ap_processors - processors_needed_after_automation
     
         # Ensure processors saved does not exceed the number of AP processors
-        processors_saved = max(0,processors_saved)
+        processors_saved = max(1,processors_saved)
     
         # **Calculate labor cost savings based on total hours saved**
         hourly_rate_per_processor = ap_processor_salary / working_hours_per_year
@@ -182,7 +182,6 @@ if submit_button:
 
         year_one_costs = automation_system_cost + ap_implementation_fee + payments_implementation_fee
         total_implementation_cost = ap_implementation_fee + payments_implementation_fee
-        annual_recurring_cost = automation_system_cost
                                       
         # Return results
         return {
@@ -203,7 +202,7 @@ if submit_button:
             "Automation Rate Over Years": automation_rates,
             "Year One Costs": year_one_costs,
             "Total Implementation Cost": total_implementation_cost,
-            "Annual Recurring Cost": annual_recurring_cost
+            "Annual Recurring Cost": automation_system_cost
         }
 
     # Calculate ROI with growth projection
