@@ -166,7 +166,7 @@ if submit_button:
             "Time Spent Over 3 Years (hours)": time_spent_years_hours,
             "ROI (%)": roi_final,  # Add the final ROI to the results
             "ROI Over Time": roi_over_time,  # ROI over each year
-            "Days Saved"": time_saved_in_days 
+            "Days Saved": time_saved_in_days 
         }
 
     # Calculate ROI with growth projection
