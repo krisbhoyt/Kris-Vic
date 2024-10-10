@@ -75,7 +75,7 @@ if submit_button:
         time_per_invoice_after_hours = time_per_invoice_after / 60
 
         # Define an inverted exponential curve for progressive automation
-        def exponential_progression_inverted(target_rate, years, lambd=0.7):
+        def exponential_progression_inverted(target_rate, years, lambd=0.7, min_rate=0.001):
             # Invert the exponential progression so that it starts at 0 and approaches the target rate
             return [target_rate * (1 - np.exp(-lambd * t)) for t in range(0, years + 1)]
 
