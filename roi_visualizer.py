@@ -69,17 +69,17 @@ if submit_button:
     def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
                                   missed_discounts, time_per_invoice_before, time_per_invoice_after, 
                                   automation_system_cost, automation_rate):
-        
+
+        # Calculate the projected future invoice volume with realistic scaling
+        growth_multiplier = (1 + growth_rate / 100) ** years
+        annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volum
+                                      
         # Convert time from minutes to hours for the calculations
         time_per_invoice_before_hours = (annual_invoice_volume * time_per_invoice_before) / 60
         time_per_invoice_after_hours = (non_automated_invoice_volume * time_per_invoice_after) / 60
 
         # Calculate time saved per invoice
         time_saved_per_invoice_hours = time_per_invoice_before_hours - time_per_invoice_after_hours
-
-        # Calculate the projected future invoice volume with realistic scaling
-        growth_multiplier = (1 + growth_rate / 100) ** years
-        annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
 
         # Total Time Spent without automation (Year 0)
         total_time_no_automation = time_per_invoice_before * annual_invoice_volume
