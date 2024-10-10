@@ -65,11 +65,23 @@ if submit_button:
     def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_processor_salary, num_ap_processors, 
                                   missed_discounts, time_per_invoice_before, time_per_invoice_after, 
                                   automation_system_cost, automation_rate):
+
+        # Call the function to get time savings per year
+        time_per_invoice_years, automation_rates = calculate_time_per_invoice_over_years(time_per_invoice_before, automation_rate, years)
         
         # Calculate the projected future invoice volume with realistic scaling
         growth_multiplier = (1 + growth_rate / 100) ** years
         annual_invoice_volume = current_invoice_volume * 12 * growth_multiplier  # Scaling to annual volume
 
+        # Calculate the total time spent processing invoices each year with progressive automation
+        total_time_saved_years = []
+        for year, time_per_invoice in enumerate(time_per_invoice_years):
+            total_time_per_year = annual_invoice_volume * time_per_invoice / 60  # Convert to hours
+            total_time_saved_years.append(total_time_per_year)
+
+        # Total time saved is the difference between year 0 (no automation) and year N (full automation)
+        total_time_saved_hours = total_time_saved_years[0] - total_time_saved_years[-1]
+                                      
         # Convert time from minutes to hours for the calculations
         time_per_invoice_before_hours = time_per_invoice_before / 60
         time_per_invoice_after_hours = time_per_invoice_after / 60
@@ -91,7 +103,7 @@ if submit_button:
             time_per_invoice = initial_time * (1 - current_automation_rate)  # Time saved based on automation rate
             time_per_invoice_years.append(time_per_invoice)
         
-            return time_per_invoice_years
+            return time_per_invoice_years, automation_rates
 
         # Calculate time per invoice for each year
         time_per_invoice_years = calculate_time_per_invoice_over_years(initial_time_per_invoice, automation_rate, years)
