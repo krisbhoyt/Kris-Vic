@@ -233,10 +233,9 @@ if submit_button:
     # Convert time spent from minutes to hours for visualization
     time_spent_years_hours = [time / 60 for time in time_spent_years]
 
-    # Return the relevant results, including the time spent progression over the years
-    return {
+    # Correct indentation for return inside the function
+        return {
         "Time Spent Over 3 Years (hours)": time_spent_years_hours,
-        # other return values...
     }
 
     # Line chart to show time spent each year
