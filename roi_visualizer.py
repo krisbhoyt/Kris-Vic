@@ -248,7 +248,7 @@ if submit_button:
         yaxis_title='Time Spent (hours)',
         plot_bgcolor=WHITE,
         paper_bgcolor=WHITE,
-        font=dict(color=BLACK)
+        font=dict(color=BLACK),
         yaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         xaxis=dict(title_font=dict(color=BLACK), tickfont=dict(color=BLACK)),
         legend=dict(title_font=dict(color=BLACK), font=dict(color=BLACK))
