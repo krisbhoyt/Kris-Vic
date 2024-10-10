@@ -112,7 +112,7 @@ if submit_button:
         total_time_saved_hours = total_time_saved_years[0] - total_time_saved_years[-1]   
 
         # Total time saved for non-automated invoices
-        non_automated_invoice_volume = annual_invoice_volume / (1 - automation_rate / 100)
+        non_automated_invoice_volume = annual_invoice_volume * (1 - (automation_rate / 100))
         total_time_saved_non_automated = non_automated_invoice_volume * (initial_time_per_invoice / 60 - time_per_invoice_after / 60)
 
         # Calculate total hours saved correctly
