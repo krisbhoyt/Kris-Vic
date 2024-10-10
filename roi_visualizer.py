@@ -84,12 +84,12 @@ if submit_button:
                                             time_per_invoice_years = []
                                             automation_rates = []
         
-            # Calculate time reduction each year assuming linear automation increase
-            for year in range(0, years + 1):
-                    # Linear progression of automation from 0% to target rate over the years
-                    current_automation_rate = (year / years) * automation_rate / 100
-                    time_per_invoice = initial_time * (1 - current_automation_rate)  # Time saved based on automation rate
-                    time_per_invoice_years.append(time_per_invoice)
+        # Calculate time reduction each year assuming linear automation increase
+        for year in range(0, years + 1):
+            # Linear progression of automation from 0% to target rate over the years
+            current_automation_rate = (year / years) * automation_rate / 100
+            time_per_invoice = initial_time * (1 - current_automation_rate)  # Time saved based on automation rate
+            time_per_invoice_years.append(time_per_invoice)
         
             return time_per_invoice_years
 
