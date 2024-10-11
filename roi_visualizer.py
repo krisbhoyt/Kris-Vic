@@ -144,7 +144,7 @@ def calculate_roi_with_growth(current_invoice_volume, growth_rate, years, ap_pro
     processors_needed_after_automation = total_time_non_automated / working_hours_per_year
     
     # Calculate the number of processors saved based on the remaining manual workload
-    processors_saved = ap_processor_salary / working_hours_per_year
+    processors_saved = total_hours_saved_from_automation / working_hours_per_year
     
     # Ensure processors_saved is a positive number and does not exceed the original number of AP processors
     processors_saved = max(0, min(processors_saved, num_ap_processors))
